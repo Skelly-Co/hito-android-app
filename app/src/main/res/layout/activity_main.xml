@@ -72,7 +72,7 @@
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="24dp"
@@ -88,11 +88,17 @@
 
         </Button>
 
-        <TextView
+        <Button
             android:id="@+id/tvCreateAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.49"
+            android:layout_height="54dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?attr/colorBackground"
             android:text="@string/create_account"
+            android:textAllCaps="false"
             android:textSize="15sp"
             android:textColor="?attr/colorText"
             app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"
@@ -100,7 +106,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider">
 
-        </TextView>
+        </Button>
 
         <View
             android:id="@+id/vwAdditionalActionsDivider"
@@ -115,11 +121,17 @@
             app:layout_constraintTop_toBottomOf="@+id/btnLogin"
             app:layout_constraintVertical_bias="0.99"/>
 
-        <TextView
+        <Button
             android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.49"
+            android:layout_height="54dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="?attr/colorBackground"
             android:text="@string/forgot_password"
+            android:textAllCaps="false"
             android:textSize="15sp"
             android:textColor="?attr/colorText"
             app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"
@@ -127,7 +139,7 @@
             app:layout_constraintStart_toEndOf="@+id/vwAdditionalActionsDivider"
             app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider">
 
-        </TextView>
+        </Button>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
