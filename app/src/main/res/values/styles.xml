@@ -18,4 +18,10 @@
         <item name="android:fontFamily">@font/whitney</item>
     </style>
 
+    <style name="AppDarkTheme.SlidrActivityTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
 </resources>

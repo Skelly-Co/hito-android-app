@@ -2,7 +2,10 @@
     <string name="app_name">hito</string>
     <string name="email">Email</string>
     <string name="Password">Password</string>
+    <string name="Username">Username</string>
     <string name="login">Login</string>
     <string name="create_account">Create account</string>
-    <string name="forgot_password">Forgot password</string>
+    <string name="Create">Create</string>
+    <string name="an_account">an account.</string>
+    <string name="Forgot_password">Forgot password</string>
 </resources>

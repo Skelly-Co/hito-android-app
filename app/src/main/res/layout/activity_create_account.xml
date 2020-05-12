@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="?attr/colorBackground"
+    tools:context=".CreateAccountActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/back"
+            android:background="@null"
+            android:scaleType="fitXY">
+
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/tvCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvAnAccount"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.01"
+            android:layout_marginStart="42dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/Create"
+            android:textColor="?attr/colorText"
+            android:textSize="@dimen/_32ssp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvAnAccount"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvCreate"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/etEmail"
+            android:layout_marginStart="42dp"
+            android:text="@string/an_account"
+            android:textColor="?attr/colorText"
+            android:textSize="@dimen/_32ssp">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/tvAnAccount"
+            app:layout_constraintBottom_toTopOf="@id/etUsername"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="42dp"
+            android:padding="10dp"
+            android:background="@drawable/edit_text"
+            android:inputType="textEmailAddress"
+            android:textSize="15sp"
+            android:textColor="?attr/colorText"
+            android:hint="@string/email"
+            android:textColorHint="?attr/colorTextContrast"
+            android:textCursorDrawable="@null">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            app:layout_constraintBottom_toTopOf="@id/etPassword"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:padding="10dp"
+            android:background="@drawable/edit_text"
+            android:inputType="text"
+            android:textSize="15sp"
+            android:textColor="?attr/colorText"
+            android:hint="@string/Username"
+            android:textColorHint="?attr/colorTextContrast"
+            android:textCursorDrawable="@null">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/etUsername"
+            app:layout_constraintBottom_toTopOf="@id/btnCreateAccount"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:padding="10dp"
+            android:background="@drawable/edit_text"
+            android:inputType="textPassword"
+            android:textSize="15sp"
+            android:textColor="?attr/colorText"
+            android:hint="@string/Password"
+            android:textColorHint="?attr/colorTextContrast"
+            android:textCursorDrawable="@null">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/button"
+            android:text="@string/Create"
+            android:textSize="13sp"
+            android:textFontWeight="700"
+            android:textColor="?attr/colorText"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </Button>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
