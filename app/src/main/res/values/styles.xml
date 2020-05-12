@@ -13,9 +13,15 @@
         <item name="colorText">@color/colorWhite</item>
         <item name="colorTextContrast">@color/colorLightGrey</item>
         <item name="android:navigationBarColor">@color/colorDark</item>
+        <item name="android:windowBackground">@color/colorDark</item>
 
         <!-- Font -->
         <item name="android:fontFamily">@font/whitney</item>
+    </style>
+
+    <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
+    <style name="AppDarkTheme.Launcher">
+    <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
 
     <style name="AppDarkTheme.SlidrActivityTheme">
