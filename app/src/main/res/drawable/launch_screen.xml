@@ -3,12 +3,10 @@
 <!-- The android:opacity=”opaque” line — this is critical in preventing a flash of black as your theme transitions. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" android:opacity="opaque">
     <item android:drawable="?attr/colorBackground"/>
-    <item>
-
-        <bitmap
-            android:src="@drawable/logo_splash"
-            android:gravity="center"/>
-
-    </item>
+    <item
+        android:width="100dp"
+        android:height="41dp"
+        android:drawable="@drawable/logo"
+        android:gravity="center" />
 
 </layer-list>

@@ -1,4 +1,4 @@
-package com.skellyco.hito;
+package com.skellyco.hito.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import com.r0adkll.slidr.Slidr;
+import com.skellyco.hito.R;
+import com.skellyco.hito.dto.LoginDTO;
 
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnLogin;
+    private EditText etEmail;
+    private EditText etPassword;
     private TextView tvCreateAccount;
     private TextView tvForgotPassword;
 
@@ -27,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeViews()
     {
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
         tvCreateAccount = findViewById(R.id.tvCreateAccount);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -37,7 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
+                LoginDTO loginDTO = new LoginDTO(email, password);
+                login(loginDTO);
             }
         });
 
@@ -56,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void login()
+    private void login(LoginDTO loginDTO)
     {
 
     }
@@ -70,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void startForgotPasswordActivity()
     {
-
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 }

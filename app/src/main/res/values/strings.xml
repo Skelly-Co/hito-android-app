@@ -6,6 +6,9 @@
     <string name="login">Login</string>
     <string name="create_account">Create account</string>
     <string name="Create">Create</string>
-    <string name="an_account">an account.</string>
+    <string name="an_account_dot">an account.</string>
     <string name="Forgot_password">Forgot password</string>
+    <string name="Forgot">Forgot</string>
+    <string name="your_password_question">your password?</string>
+    <string name="Confirm">Confirm</string>
 </resources>
