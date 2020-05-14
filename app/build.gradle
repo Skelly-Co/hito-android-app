@@ -45,4 +45,7 @@ dependencies {
     //Slidable Activities
     implementation 'com.r0adkll:slidableactivity:2.1.0'
 
+    //Firebase
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+
 }

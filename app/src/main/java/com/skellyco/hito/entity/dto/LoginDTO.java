@@ -1,4 +1,4 @@
-package com.skellyco.hito.dto;
+package com.skellyco.hito.entity.dto;
 
 public class LoginDTO {
 
