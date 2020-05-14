@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
-import com.skellyco.hito.entity.dto.ResetPasswordDTO;
+import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
-import com.skellyco.hito.entity.dto.CreateAccountDTO;
+import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 
 public class CreateAccountActivity extends AppCompatActivity {
 

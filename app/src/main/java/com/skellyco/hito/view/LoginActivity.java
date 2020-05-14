@@ -10,8 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.skellyco.hito.R;
-import com.skellyco.hito.entity.dto.LoginDTO;
-import com.skellyco.hito.model.AuthenticationRepository;
+import com.skellyco.hito.core.entity.dto.LoginDTO;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -68,8 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(LoginDTO loginDTO)
     {
-        AuthenticationRepository repo = new AuthenticationRepository();
-        repo.login(loginDTO);
+
     }
 
     private void startCreateAccountActivity()

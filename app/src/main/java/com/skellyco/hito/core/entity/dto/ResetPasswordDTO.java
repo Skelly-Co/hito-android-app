@@ -1,4 +1,4 @@
-package com.skellyco.hito.entity.dto;
+package com.skellyco.hito.core.entity.dto;
 
 public class ResetPasswordDTO {
 
