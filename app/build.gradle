@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -24,6 +25,8 @@ android {
 }
 
 dependencies {
+    def lifecycle_version = "2.2.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -32,9 +35,14 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // ViewModel & LiveData
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
     //Scalable text
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
     //Slidable Activities
     implementation 'com.r0adkll:slidableactivity:2.1.0'
+
 }
