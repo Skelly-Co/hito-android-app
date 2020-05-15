@@ -23,6 +23,7 @@ import com.skellyco.hito.core.error.LoginError;
 import com.skellyco.hito.core.error.ResetPasswordError;
 import com.skellyco.hito.model.firebase.dao.AuthenticationDAO;
 import com.skellyco.hito.model.firebase.dao.UserDAO;
+import com.skellyco.hito.model.firebase.util.ErrorResolver;
 
 public class AuthenticationRepository implements IAuthenticationRepository {
 
@@ -30,34 +31,50 @@ public class AuthenticationRepository implements IAuthenticationRepository {
 
     private AuthenticationDAO authenticationDAO;
     private UserDAO userDAO;
-    private MutableLiveData<Resource<User, LoginError>> loggedInUser;
 
     public AuthenticationRepository()
     {
         authenticationDAO = new AuthenticationDAO();
         userDAO = new UserDAO();
-        loggedInUser = new MutableLiveData<>();
     }
 
     @Override
     public MutableLiveData<Resource<User, LoginError>> login(LoginDTO loginDTO)
     {
+        final MutableLiveData<Resource<User, LoginError>> loginResource = new MutableLiveData<>();
         authenticationDAO.login(loginDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
-                    String loggedInUserUid = task.getResult().getUser().getUid();
-                    fetchAndObserveUser(loggedInUserUid);
+                    String uid = task.getResult().getUser().getUid();
+                    userDAO.getUser(uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                            if(documentSnapshot.exists())
+                            {
+                                User user = documentSnapshot.toObject(User.class);
+                                Resource<User, LoginError> resource = new Resource<>(Resource.Status.SUCCESS, user, null);
+                                loginResource.setValue(resource);
+                            }
+                            else
+                            {
+                                //handle error - user not found
+                                Log.e(TAG, "User not found");
+                            }
+                        }
+                    });
                 }
                 else
                 {
-                    //handle error - authentication failed
-                    Log.e(TAG, task.getException().toString());
+                    String errorMessage = task.getException().getMessage();
+                    LoginError error = ErrorResolver.resolveLoginError(errorMessage);
+                    Resource<User, LoginError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                    loginResource.setValue(resource);
                 }
             }
         });
-        return loggedInUser;
+        return loginResource;
     }
 
     @Override
@@ -117,26 +134,6 @@ public class AuthenticationRepository implements IAuthenticationRepository {
             }
         });
         return resetPasswordResource;
-    }
-
-    private void fetchAndObserveUser(String uid)
-    {
-        userDAO.getUser(uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(documentSnapshot.exists())
-                {
-                    User user = documentSnapshot.toObject(User.class);
-                    Resource<User, LoginError> resource = new Resource<>(Resource.Status.SUCCESS, user, null);
-                    loggedInUser.setValue(resource);
-                }
-                else
-                {
-                    //handle error - user not found
-                    Log.e(TAG, "User not found");
-                }
-            }
-        });
     }
 
 }
