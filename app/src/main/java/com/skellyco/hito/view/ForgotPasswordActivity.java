@@ -14,6 +14,8 @@ import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    public static final String TAG = "ForgotPasswordActivity";
+
     private ImageButton btnBack;
     private EditText etEmail;
     private Button btnConfirm;

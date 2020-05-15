@@ -14,6 +14,8 @@ import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
+    public static final String TAG = "CreateAccountActivity";
+
     private ImageButton btnBack;
     private EditText etEmail;
     private EditText etUsername;
