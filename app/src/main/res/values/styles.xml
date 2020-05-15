@@ -21,7 +21,7 @@
 
     <!-- The launcher theme. It sets the main window background to the launch_screen drawable -->
     <style name="AppDarkTheme.Launcher">
-    <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
 
     <style name="AppDarkTheme.SlidrActivityTheme">
