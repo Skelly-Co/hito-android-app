@@ -2,6 +2,7 @@
   <dictionary name="schemabuoi">
     <words>
       <w>firestore</w>
+      <w>slidr</w>
     </words>
   </dictionary>
 </component>
