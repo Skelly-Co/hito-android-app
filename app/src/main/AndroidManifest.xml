@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDarkTheme">
+        <activity android:name=".view.MainActivity"></activity>
         <activity
             android:name=".view.SplashActivity"
             android:theme="@style/AppDarkTheme.Launcher">
@@ -18,12 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.LoginActivity"/>
+        <activity android:name=".view.LoginActivity" />
         <activity
             android:name=".view.CreateAccountActivity"
-            android:theme="@style/AppDarkTheme.SlidrActivityTheme"/>
-        <activity android:name=".view.ForgotPasswordActivity"
-            android:theme="@style/AppDarkTheme.SlidrActivityTheme"/>
+            android:theme="@style/AppDarkTheme.SlidrActivityTheme" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:theme="@style/AppDarkTheme.SlidrActivityTheme" />
     </application>
 
 </manifest>
