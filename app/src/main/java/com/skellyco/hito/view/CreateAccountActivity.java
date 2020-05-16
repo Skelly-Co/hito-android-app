@@ -1,6 +1,7 @@
 package com.skellyco.hito.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
+import com.skellyco.hito.viewmodel.CreateAccountViewModel;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -22,6 +24,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnCreateAccount;
 
+    private CreateAccountViewModel createAccountViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         initializeViews();
         initializeListeners();
+        initializeViewModel();
     }
 
     private void initializeViews()
@@ -60,6 +65,11 @@ public class CreateAccountActivity extends AppCompatActivity {
                 createAccount(createAccountDTO);
             }
         });
+    }
+
+    private void initializeViewModel()
+    {
+        createAccountViewModel = new ViewModelProvider(this).get(CreateAccountViewModel.class);
     }
 
     private void createAccount(CreateAccountDTO createAccountDTO)

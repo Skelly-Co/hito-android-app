@@ -3,15 +3,11 @@ package com.skellyco.hito.model.firebase;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.skellyco.hito.core.domain.IAuthenticationRepository;
 import com.skellyco.hito.core.domain.Resource;
 import com.skellyco.hito.core.entity.User;
@@ -39,39 +35,23 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public MutableLiveData<Resource<User, LoginError>> login(LoginDTO loginDTO)
+    public MutableLiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
     {
-        final MutableLiveData<Resource<User, LoginError>> loginResource = new MutableLiveData<>();
+        final MutableLiveData<Resource<String, LoginError>> loginResource = new MutableLiveData<>();
         authenticationDAO.login(loginDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
                     String uid = task.getResult().getUser().getUid();
-                    userDAO.getUser(uid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                            if(documentSnapshot.exists())
-                            {
-                                User user = documentSnapshot.toObject(User.class);
-                                Resource<User, LoginError> resource = new Resource<>(Resource.Status.SUCCESS, user, null);
-                                loginResource.setValue(resource);
-                            }
-                            else
-                            {
-                                Log.e(TAG, e.getMessage());
-                                LoginError error = new LoginError(LoginError.Type.UNKNOWN);
-                                Resource<User, LoginError> resource = new Resource<>(Resource.Status.ERROR, null, error);
-                                loginResource.setValue(resource);
-                            }
-                        }
-                    });
+                    Resource<String, LoginError> resource = new Resource<>(Resource.Status.SUCCESS, uid, null);
+                    loginResource.setValue(resource);
                 }
                 else
                 {
                     String errorMessage = task.getException().getMessage();
                     LoginError error = ErrorResolver.resolveLoginError(errorMessage);
-                    Resource<User, LoginError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                    Resource<String, LoginError> resource = new Resource<>(Resource.Status.ERROR, null, error);
                     loginResource.setValue(resource);
                 }
             }

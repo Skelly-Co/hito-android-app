@@ -19,7 +19,7 @@ public class LoginViewModel extends ViewModel {
         authenticationRepository = RepositoryProvider.getAuthenticationRepository();
     }
 
-    public LiveData<Resource<User, LoginError>> login(LoginDTO loginDTO)
+    public LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
     {
         return authenticationRepository.login(loginDTO);
     }

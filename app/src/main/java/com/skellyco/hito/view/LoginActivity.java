@@ -88,12 +88,13 @@ public class LoginActivity extends AppCompatActivity {
     private void login(LoginDTO loginDTO)
     {
         btnLogin.setEnabled(false);
-        final LiveData<Resource<User, LoginError>> loginResource = loginViewModel.login(loginDTO);
-        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<User, LoginError>>() {
+        final LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
+        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
-            public void onChanged(Resource<User, LoginError> resource) {
+            public void onChanged(Resource<String, LoginError> resource) {
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
+                    Log.e(TAG, resource.getData());
                     startMainActivity();
                     finish();
                 }
