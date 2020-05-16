@@ -59,8 +59,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
                             }
                             else
                             {
-                                //handle error - user not found
-                                Log.e(TAG, "User not found");
+                                Log.e(TAG, e.getMessage());
+                                LoginError error = new LoginError(LoginError.Type.UNKNOWN);
+                                Resource<User, LoginError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                                loginResource.setValue(resource);
                             }
                         }
                     });
@@ -98,8 +100,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
                             }
                             else
                             {
-                                //handle error - cannot create user
-                                Log.e(TAG, task.getException().toString());
+                                Log.e(TAG, task.getException().getMessage());
+                                CreateAccountError error = new CreateAccountError(CreateAccountError.Type.UNKNOWN);
+                                Resource<Void, CreateAccountError> resource = new Resource<>(Resource.Status.SUCCESS, null, error);
+                                createAccountResource.setValue(resource);
                             }
                         }
                     });
