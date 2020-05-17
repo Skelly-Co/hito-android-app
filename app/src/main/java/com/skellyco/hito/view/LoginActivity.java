@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -98,14 +97,13 @@ public class LoginActivity extends AppCompatActivity {
     {
         clearErrors();
         showLoading();
-        final LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
+        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {
                 hideLoading();
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
-                    Log.e(TAG, resource.getData());
                     startMainActivity();
                     finish();
                 }
@@ -180,7 +178,6 @@ public class LoginActivity extends AppCompatActivity {
     private void displayEmailError(String errorMessage)
     {
         LayoutParams params = (LayoutParams) etPassword.getLayoutParams();
-        System.out.println(params.topMargin);
         params.setMargins(32, 32, 32, 0);
         etPassword.setLayoutParams(params);
         etEmail.setBackgroundResource(R.drawable.edit_text_error);
