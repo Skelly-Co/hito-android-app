@@ -1,16 +1,22 @@
 package com.skellyco.hito.view;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +25,7 @@ import com.skellyco.hito.core.domain.Resource;
 import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.error.LoginError;
+import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
 import com.skellyco.hito.viewmodel.LoginViewModel;
 
@@ -26,11 +33,14 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
 
-    private Button btnLogin;
     private EditText etEmail;
+    private TextView tvEmailError;
     private EditText etPassword;
+    private TextView tvPasswordError;
+    private Button btnLogin;
     private TextView tvCreateAccount;
     private TextView tvForgotPassword;
+    private RelativeLayout relLoadingPanel;
 
     private LoginViewModel loginViewModel;
 
@@ -47,10 +57,13 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeViews()
     {
         etEmail = findViewById(R.id.etEmail);
+        tvEmailError = findViewById(R.id.tvEmailError);
         etPassword = findViewById(R.id.etPassword);
+        tvPasswordError = findViewById(R.id.tvPasswordError);
+        btnLogin = findViewById(R.id.btnLogin);
         tvCreateAccount = findViewById(R.id.tvCreateAccount);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        btnLogin = findViewById(R.id.btnLogin);
+        relLoadingPanel = findViewById(R.id.relLoadingPanel);
     }
 
     private void initializeListeners()
@@ -87,11 +100,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(LoginDTO loginDTO)
     {
-        btnLogin.setEnabled(false);
+        clearErrors();
+        showLoading();
         final LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {
+                hideLoading();
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
                     Log.e(TAG, resource.getData());
@@ -100,14 +115,95 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Toast toast = Toast.makeText(getApplicationContext(),resource.getError().getType().toString(),Toast. LENGTH_SHORT);
-                    toast. setMargin(50,50);
-                    toast. show();
-                    Log.e(TAG, "onChanged called!");
-                    btnLogin.setEnabled(true);
+                    switch(resource.getError().getType())
+                    {
+                        case USER_NOT_FOUND:
+                        {
+                            displayEmailError("The email address does not exist.");
+                            break;
+                        }
+                        case WRONG_PASSWORD:
+                        {
+                            displayPasswordError("Incorrect password.");
+                            break;
+                        }
+                        case TOO_MANY_ATTEMPTS:
+                        {
+                            displayPasswordError("Too many attempts - try again later.");
+                            break;
+                        }
+                        case NETWORK_ERROR:
+                        {
+                            displayGenericError("A network error has occurred. Please check your internet connection or try again later.");
+                            break;
+                        }
+                        case UNKNOWN:
+                        {
+                            displayGenericError("Something went wrong. Try again later or contact support.");
+                            break;
+                        }
+                    }
                 }
             }
         });
+    }
+
+    private void showLoading()
+    {
+        relLoadingPanel.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideLoading()
+    {
+        relLoadingPanel.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void displayEmailError(String errorMessage)
+    {
+        LayoutParams params = (LayoutParams) etPassword.getLayoutParams();
+        System.out.println(params.topMargin);
+        params.setMargins(32, 32, 32, 0);
+        etPassword.setLayoutParams(params);
+        etEmail.setBackgroundResource(R.drawable.edit_text_error);
+        tvEmailError.setText(errorMessage);
+        tvEmailError.setVisibility(View.VISIBLE);
+    }
+
+    private void displayPasswordError(String errorMessage)
+    {
+        LayoutParams params = (LayoutParams) btnLogin.getLayoutParams();
+        params.setMargins(32,42,32,0);
+        btnLogin.setLayoutParams(params);
+        etPassword.setBackgroundResource(R.drawable.edit_text_error);
+        tvPasswordError.setText(errorMessage);
+        tvPasswordError.setVisibility(View.VISIBLE);
+    }
+
+    private void displayGenericError(String errorMessage)
+    {
+        AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
+        errorDialog.show();
+    }
+
+    private void clearErrors()
+    {
+        LayoutParams passwordParams = (LayoutParams) etPassword.getLayoutParams();
+        passwordParams.setMargins(32,72,32,0);
+        etPassword.setLayoutParams(passwordParams);
+
+        LayoutParams loginParams = (LayoutParams) btnLogin.getLayoutParams();
+        loginParams.setMargins(32,72,32,0);
+        btnLogin.setLayoutParams(loginParams);
+
+        etEmail.setBackgroundResource(R.drawable.edit_text);
+        etPassword.setBackgroundResource(R.drawable.edit_text);
+        tvEmailError.setText("");
+        tvEmailError.setVisibility(View.GONE);
+        tvPasswordError.setText("");
+        tvPasswordError.setVisibility(View.GONE);
+
     }
 
     private void startCreateAccountActivity()

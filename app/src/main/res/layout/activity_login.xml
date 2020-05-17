@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrMainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -9,6 +10,7 @@
     tools:context=".view.LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/conMainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,12 +42,25 @@
             android:hint="@string/email"
             android:textColorHint="?attr/colorTextContrast"
             android:textCursorDrawable="@null"
-            app:layout_constraintBottom_toTopOf="@+id/etPassword"
+            app:layout_constraintBottom_toTopOf="@+id/tvEmailError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imgLogo">
 
         </EditText>
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            app:layout_constraintLeft_toLeftOf="@id/etEmail"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:textColor="?attr/colorError"
+            android:visibility="gone">
+
+        </TextView>
 
         <EditText
             android:id="@+id/etPassword"
@@ -62,12 +77,25 @@
             android:hint="@string/Password"
             android:textColorHint="?attr/colorTextContrast"
             android:textCursorDrawable="@null"
-            app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+            app:layout_constraintBottom_toTopOf="@+id/tvPasswordError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etEmail">
+            app:layout_constraintTop_toBottomOf="@id/tvEmailError">
 
         </EditText>
+
+        <TextView
+            android:id="@+id/tvPasswordError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            app:layout_constraintLeft_toLeftOf="@id/etPassword"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:textColor="?attr/colorError"
+            android:visibility="gone">
+
+        </TextView>
 
         <Button
             android:id="@+id/btnLogin"
@@ -83,7 +111,7 @@
             android:textFontWeight="700"
             android:textColor="?attr/colorText"
             android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            app:layout_constraintTop_toBottomOf="@id/tvPasswordError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -142,184 +170,231 @@
 
         </Button>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:id="@+id/relLoadingPanel"
+            android:background="#99000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:elevation="10dp">
 
+            <ProgressBar
+                android:id="@+id/pbrLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="?attr/colorPrimary"/>
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </ScrollView>
 
 <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--xmlns:tools="http://schemas.android.com/tools"-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="match_parent"-->
-<!--android:fillViewport="true"-->
-<!--android:background="?attr/colorBackground"-->
-<!--tools:context=".LoginActivity">-->
-
-<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/scrMainContainer"-->
 <!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content">-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="?attr/colorBackground"-->
+<!--    android:fillViewport="true"-->
+<!--    tools:context=".view.LoginActivity">-->
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imgLogo"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:src="@drawable/logo"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/tvEmail"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--    </ImageView>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tvEmail"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="4dp"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:text="@string/email"-->
-<!--        android:textColor="?attr/colorTextContrast"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textFontWeight="700"-->
-<!--        android:textAllCaps="true"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/etEmail"-->
-<!--        app:layout_constraintStart_toStartOf="@id/etEmail"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/imgLogo">-->
-<!--    </TextView>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/etEmail"-->
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/conMainContainer"-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:padding="10dp"-->
-<!--        android:background="@drawable/edit_text"-->
-<!--        android:inputType="textEmailAddress"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="?attr/colorText"-->
-<!--        android:textCursorDrawable="@null"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/tvPassword"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tvEmail">-->
+<!--        android:layout_height="wrap_content">-->
 
-<!--    </EditText>-->
+<!--        <ImageView-->
+<!--            android:id="@+id/imgLogo"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:src="@drawable/logo"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/tvEmail"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/tvPassword"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="4dp"-->
-<!--        android:layout_marginTop="24dp"-->
-<!--        android:text="@string/Password"-->
-<!--        android:textColor="?attr/colorTextContrast"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textFontWeight="700"-->
-<!--        android:textAllCaps="true"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/etPassword"-->
-<!--        app:layout_constraintStart_toStartOf="@id/etPassword"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/etEmail">-->
-<!--    </TextView>-->
+<!--        </ImageView>-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/etPassword"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:padding="10dp"-->
-<!--        android:background="@drawable/edit_text"-->
-<!--        android:inputType="textPassword"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="?attr/colorText"-->
-<!--        android:textCursorDrawable="@null"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/btnLogin"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tvPassword">-->
+<!--        <TextView-->
+<!--            android:id="@+id/tvEmail"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="@string/email"-->
+<!--            android:textAllCaps="true"-->
+<!--            android:textColor="?attr/colorTextContrast"-->
+<!--            android:textFontWeight="700"-->
+<!--            android:textSize="12sp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/etEmail"-->
+<!--            app:layout_constraintStart_toStartOf="@id/etEmail"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/imgLogo">-->
 
-<!--    </EditText>-->
+<!--        </TextView>-->
 
-<!--    <Button-->
-<!--        android:id="@+id/btnLogin"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_marginEnd="32dp"-->
-<!--        android:layout_marginStart="32dp"-->
-<!--        android:layout_marginTop="36dp"-->
-<!--        android:foreground="?android:attr/selectableItemBackground"-->
-<!--        android:background="@drawable/button"-->
-<!--        android:text="@string/login"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="?attr/colorText"-->
-<!--        android:textAllCaps="false"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/etPassword"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
+<!--        <EditText-->
+<!--            android:id="@+id/etEmail"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginStart="32dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_marginEnd="32dp"-->
+<!--            android:background="@drawable/edit_text"-->
+<!--            android:inputType="textEmailAddress"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="?attr/colorText"-->
+<!--            android:textCursorDrawable="@null"-->
+<!--            android:textSize="16sp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/tvPassword"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvEmail">-->
 
-<!--    </Button>-->
+<!--        </EditText>-->
 
-<!--    <Button-->
-<!--        android:id="@+id/tvCreateAccount"-->
-<!--        android:layout_width="0dp"-->
-<!--        app:layout_constraintWidth_default="percent"-->
-<!--        app:layout_constraintWidth_percent="0.49"-->
-<!--        android:layout_height="54dp"-->
-<!--        style="?android:attr/borderlessButtonStyle"-->
-<!--        android:foreground="?android:attr/selectableItemBackground"-->
-<!--        android:background="?attr/colorBackground"-->
-<!--        android:text="@string/create_account"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="?attr/colorText"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/vwAdditionalActionsDivider"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider">-->
+<!--        <TextView-->
+<!--            android:id="@+id/tvPassword"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="@string/Password"-->
+<!--            android:textAllCaps="true"-->
+<!--            android:textColor="?attr/colorTextContrast"-->
+<!--            android:textFontWeight="700"-->
+<!--            android:textSize="12sp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/etPassword"-->
+<!--            app:layout_constraintStart_toStartOf="@id/etPassword"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/etEmail">-->
 
-<!--    </Button>-->
+<!--        </TextView>-->
 
-<!--    <View-->
-<!--        android:id="@+id/vwAdditionalActionsDivider"-->
-<!--        android:layout_width="1dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_marginTop="32dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:background="?attr/colorText"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/btnLogin"-->
-<!--        app:layout_constraintVertical_bias="0.99"/>-->
+<!--        <EditText-->
+<!--            android:id="@+id/etPassword"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginStart="32dp"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            android:layout_marginEnd="32dp"-->
+<!--            android:background="@drawable/edit_text"-->
+<!--            android:inputType="textPassword"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="?attr/colorText"-->
+<!--            android:textCursorDrawable="@null"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/btnLogin"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvPassword">-->
 
-<!--    <Button-->
-<!--        android:id="@+id/tvForgotPassword"-->
-<!--        android:layout_width="0dp"-->
-<!--        app:layout_constraintWidth_default="percent"-->
-<!--        app:layout_constraintWidth_percent="0.49"-->
-<!--        android:layout_height="54dp"-->
-<!--        style="?android:attr/borderlessButtonStyle"-->
-<!--        android:foreground="?android:attr/selectableItemBackground"-->
-<!--        android:background="?attr/colorBackground"-->
-<!--        android:text="@string/forgot_password"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="?attr/colorText"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/vwAdditionalActionsDivider"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider">-->
+<!--        </EditText>-->
 
-<!--    </Button>-->
+<!--        <Button-->
+<!--            android:id="@+id/btnLogin"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginStart="32dp"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginEnd="32dp"-->
+<!--            android:background="@drawable/button"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"-->
+<!--            android:text="@string/login"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="?attr/colorText"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/etPassword">-->
 
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--        </Button>-->
 
+<!--        <Button-->
+<!--            android:id="@+id/tvCreateAccount"-->
+<!--            style="?android:attr/borderlessButtonStyle"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="54dp"-->
+<!--            android:background="?attr/colorBackground"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"-->
+<!--            android:text="@string/create_account"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="?attr/colorText"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintWidth_default="percent"-->
+<!--            app:layout_constraintWidth_percent="0.49">-->
+
+<!--        </Button>-->
+
+<!--        <View-->
+<!--            android:id="@+id/vwAdditionalActionsDivider"-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginTop="32dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:background="?attr/colorText"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/btnLogin"-->
+<!--            app:layout_constraintVertical_bias="0.99" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/tvForgotPassword"-->
+<!--            style="?android:attr/borderlessButtonStyle"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="54dp"-->
+<!--            android:background="?attr/colorBackground"-->
+<!--            android:foreground="?android:attr/selectableItemBackground"-->
+<!--            android:text="@string/Forgot_password"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="?attr/colorText"-->
+<!--            android:textSize="15sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/vwAdditionalActionsDivider"-->
+<!--            app:layout_constraintWidth_default="percent"-->
+<!--            app:layout_constraintWidth_percent="0.49">-->
+
+<!--        </Button>-->
+
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/relLoadingPanel"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#66000000"-->
+<!--            android:elevation="10dp"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingTop="60dp"-->
+<!--            android:visibility="invisible"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/pbrLoading"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:indeterminate="true"-->
+<!--                android:indeterminateTint="?attr/colorPrimary" />-->
+
+<!--        </RelativeLayout>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 <!--</ScrollView>-->
