@@ -43,7 +43,20 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public LiveData<Resource<Void, CreateAccountError>> createAccount(CreateAccountDTO createAccountDTO) {
-        return authenticationRepository.createAccount(createAccountDTO);
+        ValidationResult<CreateAccountError> validationResult = DTOValidator.validateCreateAccountDTO(createAccountDTO);
+        if(validationResult.isValid())
+        {
+            //return authenticationRepository.createAccount(createAccountDTO);
+            return null;
+        }
+        else
+        {
+            CreateAccountError error = validationResult.getError();
+            MutableLiveData<Resource<Void, CreateAccountError>> createAccountLiveData = new MutableLiveData<>();
+            Resource<Void, CreateAccountError> createAccountResource = new Resource<>(Resource.Status.ERROR, null, error);
+            createAccountLiveData.setValue(createAccountResource);
+            return createAccountLiveData;
+        }
     }
 
     @Override
