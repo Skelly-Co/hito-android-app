@@ -8,4 +8,5 @@
     <color name="colorContrastDark">#333336</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorLightGrey">#72767d</color>
+    <color name="colorError">@android:color/holo_red_dark</color>
 </resources>

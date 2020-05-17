@@ -12,6 +12,7 @@
         <item name="colorBackgroundContrast">@color/colorContrastDark</item>
         <item name="colorText">@color/colorWhite</item>
         <item name="colorTextContrast">@color/colorLightGrey</item>
+        <item name="colorError">@color/colorError</item>
         <item name="android:navigationBarColor">@color/colorDark</item>
         <item name="android:windowBackground">@color/colorDark</item>
 
@@ -27,7 +28,12 @@
     <style name="AppDarkTheme.SlidrActivityTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
+    <style name="DarkThemeDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
     </style>
 
 </resources>

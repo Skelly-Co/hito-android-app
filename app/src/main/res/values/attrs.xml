@@ -8,4 +8,5 @@
     <attr name="colorBackgroundContrast" format="color"/>
     <attr name="colorText" format="color"/>
     <attr name="colorTextContrast" format="color"/>
+    <attr name="colorError" format="color"/>
 </resources>
