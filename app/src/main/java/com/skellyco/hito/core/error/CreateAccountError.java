@@ -1,6 +1,6 @@
 package com.skellyco.hito.core.error;
 
-public class CreateAccountError {
+public class CreateAccountError implements IError{
 
     public enum Type {
         UNKNOWN

@@ -1,6 +1,6 @@
 package com.skellyco.hito.core.error;
 
-public class LoginError {
+public class LoginError implements IError {
 
     public enum Type {
         WRONG_PASSWORD, USER_NOT_FOUND, TOO_MANY_ATTEMPTS, NETWORK_ERROR, UNKNOWN
