@@ -2,13 +2,11 @@ package com.skellyco.hito.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.skellyco.hito.R;
 import com.skellyco.hito.core.domain.Resource;
-import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.error.LoginError;
 import com.skellyco.hito.view.util.AlertBuilder;
@@ -115,34 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    switch(resource.getError().getType())
-                    {
-                        case USER_NOT_FOUND:
-                        {
-                            displayEmailError("The email address does not exist.");
-                            break;
-                        }
-                        case WRONG_PASSWORD:
-                        {
-                            displayPasswordError("Incorrect password.");
-                            break;
-                        }
-                        case TOO_MANY_ATTEMPTS:
-                        {
-                            displayPasswordError("Too many attempts - try again later.");
-                            break;
-                        }
-                        case NETWORK_ERROR:
-                        {
-                            displayGenericError("A network error has occurred. Please check your internet connection or try again later.");
-                            break;
-                        }
-                        case UNKNOWN:
-                        {
-                            displayGenericError("Something went wrong. Try again later or contact support.");
-                            break;
-                        }
-                    }
+                    displayError(resource.getError());
                 }
             }
         });
@@ -158,6 +127,54 @@ public class LoginActivity extends AppCompatActivity {
     {
         relLoadingPanel.setVisibility(View.GONE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void displayError(LoginError error)
+    {
+        switch(error.getType())
+        {
+            case EMPTY_EMAIL:
+            {
+                displayEmailError("A valid email is required.");
+                break;
+            }
+            case INVALID_EMAIL:
+            {
+                displayEmailError("The entered email is not valid.");
+                break;
+            }
+            case EMPTY_PASSWORD:
+            {
+                displayPasswordError("Password is required.");
+                break;
+            }
+            case USER_NOT_FOUND:
+            {
+                displayEmailError("The email address does not exist.");
+                break;
+            }
+            case WRONG_PASSWORD:
+            {
+                displayPasswordError("Incorrect password.");
+                break;
+            }
+            case TOO_MANY_ATTEMPTS:
+            {
+                displayPasswordError("Too many attempts - try again later.");
+                break;
+            }
+            case NETWORK_ERROR:
+            {
+                displayGenericError("A network error has occurred. Please check your internet connection or try again later.");
+                break;
+            }
+            case UNKNOWN:
+            default:
+            {
+                displayGenericError("Something went wrong. Try again later or contact support.");
+                break;
+            }
+        }
     }
 
     private void displayEmailError(String errorMessage)
