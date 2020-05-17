@@ -1,4 +1,4 @@
-package com.skellyco.hito.core.error;
+package com.skellyco.hito.core.shared.error;
 
 public class LoginError implements IError {
 

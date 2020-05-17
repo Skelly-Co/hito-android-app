@@ -1,8 +1,9 @@
-package com.skellyco.hito.core.error;
+package com.skellyco.hito.core.shared.error;
 
 public class CreateAccountError implements IError{
 
     public enum Type {
+        EMPTY_EMAIL, INVALID_EMAIL, EMPTY_USERNAME, EMPTY_PASSWORD, WEAK_PASSWORD,
         UNKNOWN
     }
 

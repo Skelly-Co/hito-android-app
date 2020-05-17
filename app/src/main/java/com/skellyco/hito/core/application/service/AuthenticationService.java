@@ -7,13 +7,13 @@ import com.skellyco.hito.core.application.IAuthenticationService;
 import com.skellyco.hito.core.application.service.validator.DTOValidator;
 import com.skellyco.hito.core.application.service.validator.ValidationResult;
 import com.skellyco.hito.core.domain.IAuthenticationRepository;
-import com.skellyco.hito.core.domain.Resource;
+import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
-import com.skellyco.hito.core.error.CreateAccountError;
-import com.skellyco.hito.core.error.LoginError;
-import com.skellyco.hito.core.error.ResetPasswordError;
+import com.skellyco.hito.core.shared.error.CreateAccountError;
+import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.core.shared.error.ResetPasswordError;
 
 public class AuthenticationService implements IAuthenticationService {
 

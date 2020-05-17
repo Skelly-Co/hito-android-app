@@ -1,6 +1,6 @@
 package com.skellyco.hito.core.application.service.validator;
 
-import com.skellyco.hito.core.error.IError;
+import com.skellyco.hito.core.shared.error.IError;
 
 public class ValidationResult<T extends IError> {
 

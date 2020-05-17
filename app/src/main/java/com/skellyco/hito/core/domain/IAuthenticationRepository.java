@@ -2,13 +2,13 @@ package com.skellyco.hito.core.domain;
 
 import androidx.lifecycle.LiveData;
 
-import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
-import com.skellyco.hito.core.error.CreateAccountError;
-import com.skellyco.hito.core.error.LoginError;
-import com.skellyco.hito.core.error.ResetPasswordError;
+import com.skellyco.hito.core.shared.error.CreateAccountError;
+import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.core.shared.error.ResetPasswordError;
+import com.skellyco.hito.core.shared.Resource;
 
 public interface IAuthenticationRepository {
 

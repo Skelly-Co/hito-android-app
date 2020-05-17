@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.skellyco.hito.core.application.IAuthenticationService;
-import com.skellyco.hito.core.domain.Resource;
+import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
-import com.skellyco.hito.core.error.CreateAccountError;
+import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.dependency.DependencyProvider;
 
 public class CreateAccountViewModel extends ViewModel {

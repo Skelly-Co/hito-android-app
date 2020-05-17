@@ -2,9 +2,9 @@ package com.skellyco.hito.model.firebase.util;
 
 import android.util.Log;
 
-import com.skellyco.hito.core.error.CreateAccountError;
-import com.skellyco.hito.core.error.LoginError;
-import com.skellyco.hito.core.error.ResetPasswordError;
+import com.skellyco.hito.core.shared.error.CreateAccountError;
+import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.core.shared.error.ResetPasswordError;
 
 public class ErrorResolver {
 

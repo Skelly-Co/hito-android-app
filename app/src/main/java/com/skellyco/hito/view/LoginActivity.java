@@ -18,9 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.skellyco.hito.R;
-import com.skellyco.hito.core.domain.Resource;
+import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
-import com.skellyco.hito.core.error.LoginError;
+import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
 import com.skellyco.hito.viewmodel.LoginViewModel;

@@ -1,4 +1,4 @@
-package com.skellyco.hito.core.domain;
+package com.skellyco.hito.core.shared;
 
 public class Resource<T, S> {
 
