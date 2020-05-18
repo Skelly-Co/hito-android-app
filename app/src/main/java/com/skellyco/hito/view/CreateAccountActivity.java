@@ -7,13 +7,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.r0adkll.slidr.Slidr;
@@ -23,12 +28,14 @@ import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
+import com.skellyco.hito.view.util.ViewHelper;
 import com.skellyco.hito.viewmodel.CreateAccountViewModel;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
     public static final String TAG = "CreateAccountActivity";
 
+    private ScrollView scrMainContainer;
     private ImageButton btnBack;
     private EditText etEmail;
     private TextView tvEmailError;
@@ -54,6 +61,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void initializeViews()
     {
+        scrMainContainer = findViewById(R.id.scrMainContainer);
         btnBack = findViewById(R.id.btnBack);
         etEmail = findViewById(R.id.etEmail);
         tvEmailError = findViewById(R.id.tvEmailError);
@@ -93,35 +101,42 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void createAccount(CreateAccountDTO createAccountDTO)
     {
+        hideKeyboard();
         clearErrors();
         showLoading();
-        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(createAccountDTO);
-        LiveDataUtil.observeOnce(createAccountResource, new Observer<Resource<Void, CreateAccountError>>() {
-            @Override
-            public void onChanged(Resource<Void, CreateAccountError> resource) {
-                hideLoading();
-                if(resource.getStatus() == Resource.Status.SUCCESS)
-                {
+//        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(createAccountDTO);
+//        LiveDataUtil.observeOnce(createAccountResource, new Observer<Resource<Void, CreateAccountError>>() {
+//            @Override
+//            public void onChanged(Resource<Void, CreateAccountError> resource) {
+//                hideLoading();
+//                if(resource.getStatus() == Resource.Status.SUCCESS)
+//                {
+//
+//                }
+//                else
+//                {
+//                    displayError(resource.getError());
+//                }
+//            }
+//        });
+    }
 
-                }
-                else
-                {
-                    displayError(resource.getError());
-                }
-            }
-        });
+    private void hideKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(scrMainContainer.getWindowToken(), 0);
     }
 
     private void showLoading()
     {
         relLoadingPanel.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        ViewHelper.setViewGroupEnabled(scrMainContainer, false);
     }
 
     private void hideLoading()
     {
         relLoadingPanel.setVisibility(View.GONE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        ViewHelper.setViewGroupEnabled(scrMainContainer, true);
     }
 
     private void displayError(CreateAccountError error)

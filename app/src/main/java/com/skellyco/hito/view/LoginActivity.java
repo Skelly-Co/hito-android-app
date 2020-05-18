@@ -7,13 +7,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.skellyco.hito.R;
@@ -22,12 +25,14 @@ import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
+import com.skellyco.hito.view.util.ViewHelper;
 import com.skellyco.hito.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
 
+    private ScrollView scrMainContainer;
     private EditText etEmail;
     private TextView tvEmailError;
     private EditText etPassword;
@@ -51,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initializeViews()
     {
+        scrMainContainer = findViewById(R.id.scrMainContainer);
         etEmail = findViewById(R.id.etEmail);
         tvEmailError = findViewById(R.id.tvEmailError);
         etPassword = findViewById(R.id.etPassword);
@@ -95,36 +101,43 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(LoginDTO loginDTO)
     {
+        hideKeyboard();
         clearErrors();
         showLoading();
-        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
-        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
-            @Override
-            public void onChanged(Resource<String, LoginError> resource) {
-                hideLoading();
-                if(resource.getStatus() == Resource.Status.SUCCESS)
-                {
-                    startMainActivity();
-                    finish();
-                }
-                else
-                {
-                    displayError(resource.getError());
-                }
-            }
-        });
+//        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
+//        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
+//            @Override
+//            public void onChanged(Resource<String, LoginError> resource) {
+//                hideLoading();
+//                if(resource.getStatus() == Resource.Status.SUCCESS)
+//                {
+//                    startMainActivity();
+//                    finish();
+//                }
+//                else
+//                {
+//                    displayError(resource.getError());
+//                }
+//            }
+//        });
+    }
+
+    private void hideKeyboard()
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(scrMainContainer.getWindowToken(), 0);
     }
 
     private void showLoading()
     {
         relLoadingPanel.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        ViewHelper.setViewGroupEnabled(scrMainContainer, false);
     }
 
     private void hideLoading()
     {
         relLoadingPanel.setVisibility(View.GONE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        ViewHelper.setViewGroupEnabled(scrMainContainer, true);
     }
 
     private void displayError(LoginError error)

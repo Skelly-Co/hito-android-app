@@ -46,8 +46,7 @@ public class AuthenticationService implements IAuthenticationService {
         ValidationResult<CreateAccountError> validationResult = DTOValidator.validateCreateAccountDTO(createAccountDTO);
         if(validationResult.isValid())
         {
-            //return authenticationRepository.createAccount(createAccountDTO);
-            return null;
+            return authenticationRepository.createAccount(createAccountDTO);
         }
         else
         {
