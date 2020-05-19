@@ -3,8 +3,8 @@ package com.skellyco.hito.core.shared.error;
 public class CreateAccountError implements IError{
 
     public enum Type {
-        EMPTY_EMAIL, INVALID_EMAIL, EMPTY_USERNAME, EMPTY_PASSWORD, WEAK_PASSWORD,
-        UNKNOWN
+        EMPTY_EMAIL, INVALID_EMAIL, EMPTY_USERNAME, INVALID_USERNAME, EMPTY_PASSWORD, WEAK_PASSWORD,
+        EMAIL_IN_USE, NETWORK_ERROR, UNKNOWN
     }
 
     private Type type;

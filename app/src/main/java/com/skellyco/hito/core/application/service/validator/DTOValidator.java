@@ -48,6 +48,11 @@ public class DTOValidator {
             CreateAccountError error = new CreateAccountError(CreateAccountError.Type.EMPTY_USERNAME);
             return new ValidationResult<>(false, error);
         }
+        if(!validateUsername(createAccountDTO.getUsername()))
+        {
+            CreateAccountError error = new CreateAccountError(CreateAccountError.Type.INVALID_USERNAME);
+            return new ValidationResult<>(false, error);
+        }
         if(createAccountDTO.getPassword() == null || createAccountDTO.getPassword().isEmpty())
         {
             CreateAccountError error = new CreateAccountError(CreateAccountError.Type.EMPTY_PASSWORD);
@@ -70,6 +75,19 @@ public class DTOValidator {
     {
         Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=\\S+$).{8,}$");
         if(pattern.matcher(password).matches())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private static boolean validateUsername(String username)
+    {
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]{5,}$");
+        if(pattern.matcher(username).matches())
         {
             return true;
         }

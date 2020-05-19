@@ -90,8 +90,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
                 }
                 else
                 {
-                    //handle error - cant create auth user
-                    Log.e(TAG, task.getException().toString());
+                    String errorMessage = task.getException().getMessage();
+                    CreateAccountError createAccountError = ErrorResolver.resolveCreateAccountError(errorMessage);
+                    Resource<Void, CreateAccountError> resource = new Resource<>(Resource.Status.ERROR, null, createAccountError);
+                    createAccountResource.setValue(resource);
                 }
             }
         });

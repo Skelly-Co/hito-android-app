@@ -47,7 +47,27 @@ public class ErrorResolver {
 
     public static CreateAccountError resolveCreateAccountError(String errorMessage)
     {
-        return null;
+        CreateAccountError createAccountError = new CreateAccountError();
+        switch(errorMessage)
+        {
+            case "The email address is already in use by another account.":
+            {
+                createAccountError.setType(CreateAccountError.Type.EMAIL_IN_USE);
+                break;
+            }
+            case "A network error (such as timeout, interrupted connection or unreachable host) has occurred.":
+            {
+                createAccountError.setType(CreateAccountError.Type.NETWORK_ERROR);
+                break;
+            }
+            default:
+            {
+                Log.e(TAG, errorMessage);
+                createAccountError.setType(CreateAccountError.Type.UNKNOWN);
+                break;
+            }
+        }
+        return createAccountError;
     }
 
     public static ResetPasswordError resolveResetPasswordError(String errorMessage)

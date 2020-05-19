@@ -1,5 +1,6 @@
 package com.skellyco.hito.view;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
@@ -7,12 +8,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -20,8 +20,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.skellyco.hito.R;
-import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
+import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
@@ -31,6 +31,7 @@ import com.skellyco.hito.viewmodel.LoginViewModel;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
+    public static final int CREATE_ACCOUNT_ACTIVITY = 1;
 
     private ScrollView scrMainContainer;
     private EditText etEmail;
@@ -101,31 +102,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(LoginDTO loginDTO)
     {
-        hideKeyboard();
         clearErrors();
         showLoading();
-//        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
-//        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
-//            @Override
-//            public void onChanged(Resource<String, LoginError> resource) {
-//                hideLoading();
-//                if(resource.getStatus() == Resource.Status.SUCCESS)
-//                {
-//                    startMainActivity();
-//                    finish();
-//                }
-//                else
-//                {
-//                    displayError(resource.getError());
-//                }
-//            }
-//        });
-    }
-
-    private void hideKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(scrMainContainer.getWindowToken(), 0);
+        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
+        LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
+            @Override
+            public void onChanged(Resource<String, LoginError> resource) {
+                hideLoading();
+                if(resource.getStatus() == Resource.Status.SUCCESS)
+                {
+                    startMainActivity();
+                    finish();
+                }
+                else
+                {
+                    displayError(resource.getError());
+                }
+            }
+        });
     }
 
     private void showLoading()
@@ -210,7 +204,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void displayGenericError(String errorMessage)
     {
-        AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
+        AlertDialog errorDialog = AlertBuilder.buildInformationDialog(this, errorMessage);
         errorDialog.show();
     }
 
@@ -236,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
     private void startCreateAccountActivity()
     {
         Intent intent = new Intent(this, CreateAccountActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_ACCOUNT_ACTIVITY);
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
@@ -251,5 +245,28 @@ public class LoginActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CREATE_ACCOUNT_ACTIVITY)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                String email = data.getStringExtra(CreateAccountActivity.EXTRA_EMAIL);
+                String password = data.getStringExtra(CreateAccountActivity.EXTRA_PASSWORD);
+                etEmail.setText(email);
+                etPassword.setText(password);
+                final LoginDTO loginDTO = new LoginDTO(email, password);
+                //Logging in is slightly delayed here for a better user experience.
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        login(loginDTO);
+                    }
+                }, 300);
+            }
+        }
     }
 }

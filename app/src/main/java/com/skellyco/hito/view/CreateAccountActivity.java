@@ -7,12 +7,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +34,9 @@ import com.skellyco.hito.viewmodel.CreateAccountViewModel;
 public class CreateAccountActivity extends AppCompatActivity {
 
     public static final String TAG = "CreateAccountActivity";
+    public static final String EXTRA_EMAIL = "EXTRA_EMAIL";
+    public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
+
 
     private ScrollView scrMainContainer;
     private ImageButton btnBack;
@@ -99,32 +102,25 @@ public class CreateAccountActivity extends AppCompatActivity {
         createAccountViewModel = new ViewModelProvider(this).get(CreateAccountViewModel.class);
     }
 
-    private void createAccount(CreateAccountDTO createAccountDTO)
+    private void createAccount(final CreateAccountDTO createAccountDTO)
     {
-        hideKeyboard();
         clearErrors();
         showLoading();
-//        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(createAccountDTO);
-//        LiveDataUtil.observeOnce(createAccountResource, new Observer<Resource<Void, CreateAccountError>>() {
-//            @Override
-//            public void onChanged(Resource<Void, CreateAccountError> resource) {
-//                hideLoading();
-//                if(resource.getStatus() == Resource.Status.SUCCESS)
-//                {
-//
-//                }
-//                else
-//                {
-//                    displayError(resource.getError());
-//                }
-//            }
-//        });
-    }
-
-    private void hideKeyboard()
-    {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(scrMainContainer.getWindowToken(), 0);
+        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(createAccountDTO);
+        LiveDataUtil.observeOnce(createAccountResource, new Observer<Resource<Void, CreateAccountError>>() {
+            @Override
+            public void onChanged(Resource<Void, CreateAccountError> resource) {
+                hideLoading();
+                if(resource.getStatus() == Resource.Status.SUCCESS)
+                {
+                    goBackToLoginActivity(createAccountDTO);
+                }
+                else
+                {
+                    displayError(resource.getError());
+                }
+            }
+        });
     }
 
     private void showLoading()
@@ -158,6 +154,11 @@ public class CreateAccountActivity extends AppCompatActivity {
                 displayUsernameError("Username is required.");
                 break;
             }
+            case INVALID_USERNAME:
+            {
+                displayUsernameError("The entered username is not valid.");
+                break;
+            }
             case EMPTY_PASSWORD:
             {
                 displayPasswordError("Password is required.");
@@ -165,7 +166,17 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
             case WEAK_PASSWORD:
             {
-                displayPasswordError("The entered password is too weak");
+                displayPasswordError("The entered password is too weak.");
+                break;
+            }
+            case EMAIL_IN_USE:
+            {
+                displayEmailError("The entered email is already in use.");
+                break;
+            }
+            case NETWORK_ERROR:
+            {
+                displayGenericError("A network error has occurred. Please check your internet connection or try again later.");
                 break;
             }
             case UNKNOWN:
@@ -200,7 +211,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     private void displayPasswordError(String errorMessage)
     {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) btnCreateAccount.getLayoutParams();
-        params.setMargins(32,42,32,0);
+        params.setMargins(32,42,32,72);
         btnCreateAccount.setLayoutParams(params);
         etPassword.setBackgroundResource(R.drawable.edit_text_error);
         tvPasswordError.setText(errorMessage);
@@ -209,7 +220,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void displayGenericError(String errorMessage)
     {
-        AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
+        AlertDialog errorDialog = AlertBuilder.buildInformationDialog(this, errorMessage);
         errorDialog.show();
     }
 
@@ -224,7 +235,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         etPassword.setLayoutParams(passwordParams);
 
         ConstraintLayout.LayoutParams createAccountParams = (ConstraintLayout.LayoutParams) btnCreateAccount.getLayoutParams();
-        createAccountParams.setMargins(32,72,32,0);
+        createAccountParams.setMargins(32,72,32,72);
         btnCreateAccount.setLayoutParams(createAccountParams);
 
         etEmail.setBackgroundResource(R.drawable.edit_text);
@@ -237,6 +248,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         tvPasswordError.setText("");
         tvPasswordError.setVisibility(View.GONE);
 
+    }
+
+    private void goBackToLoginActivity(CreateAccountDTO createAccountDTO)
+    {
+        Intent userDataIntent = new Intent();
+        userDataIntent.putExtra(EXTRA_EMAIL, createAccountDTO.getEmail());
+        userDataIntent.putExtra(EXTRA_PASSWORD, createAccountDTO.getPassword());
+        setResult(Activity.RESULT_OK, userDataIntent);
+        finish();
     }
 
     @Override

@@ -13,8 +13,8 @@
         <item name="colorText">@color/colorWhite</item>
         <item name="colorTextContrast">@color/colorLightGrey</item>
         <item name="colorError">@color/colorError</item>
-        <item name="android:navigationBarColor">@color/colorDark</item>
         <item name="android:windowBackground">@color/colorDark</item>
+        <item name="android:navigationBarColor">#00000000</item>
 
         <!-- Font -->
         <item name="android:fontFamily">@font/whitney</item>
