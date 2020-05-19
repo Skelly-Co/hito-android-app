@@ -60,6 +60,18 @@ public class AuthenticationService implements IAuthenticationService {
 
     @Override
     public LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO) {
-        return authenticationRepository.resetPassword(resetPasswordDTO);
+        ValidationResult<ResetPasswordError> validationResult = DTOValidator.validateResetPasswordDTO(resetPasswordDTO);
+        if(validationResult.isValid())
+        {
+            return authenticationRepository.resetPassword(resetPasswordDTO);
+        }
+        else
+        {
+            ResetPasswordError error = validationResult.getError();
+            MutableLiveData<Resource<Void, ResetPasswordError>> resetPasswordLiveData = new MutableLiveData<>();
+            Resource<Void, ResetPasswordError> resetPasswordResource = new Resource<>(Resource.Status.ERROR, null, error);
+            resetPasswordLiveData.setValue(resetPasswordResource);
+            return resetPasswordLiveData;
+        }
     }
 }

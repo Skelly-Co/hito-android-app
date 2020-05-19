@@ -2,8 +2,10 @@ package com.skellyco.hito.core.application.service.validator;
 
 import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
+import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
 import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.core.shared.error.ResetPasswordError;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -61,6 +63,21 @@ public class DTOValidator {
         if(!validatePassword(createAccountDTO.getPassword()))
         {
             CreateAccountError error = new CreateAccountError(CreateAccountError.Type.WEAK_PASSWORD);
+            return new ValidationResult<>(false, error);
+        }
+        return new ValidationResult<>(true, null);
+    }
+
+    public static ValidationResult<ResetPasswordError> validateResetPasswordDTO(ResetPasswordDTO resetPasswordDTO)
+    {
+        if(resetPasswordDTO.getEmail() ==  null || resetPasswordDTO.getEmail().isEmpty())
+        {
+            ResetPasswordError error = new ResetPasswordError(ResetPasswordError.Type.EMPTY_EMAIL);
+            return new ValidationResult<>(false, error);
+        }
+        if(!validateEmail(resetPasswordDTO.getEmail()))
+        {
+            ResetPasswordError error = new ResetPasswordError(ResetPasswordError.Type.INVALID_EMAIL);
             return new ValidationResult<>(false, error);
         }
         return new ValidationResult<>(true, null);

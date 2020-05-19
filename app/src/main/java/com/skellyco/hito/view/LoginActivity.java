@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
     public static final int CREATE_ACCOUNT_ACTIVITY = 1;
+    public static final int FORGOT_PASSWORD_ACTIVITY = 1;
 
     private ScrollView scrMainContainer;
     private EditText etEmail;
@@ -237,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
     private void startForgotPasswordActivity()
     {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, FORGOT_PASSWORD_ACTIVITY);
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
@@ -266,6 +267,14 @@ public class LoginActivity extends AppCompatActivity {
                         login(loginDTO);
                     }
                 }, 300);
+            }
+        }
+        if(requestCode == FORGOT_PASSWORD_ACTIVITY)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                String email = data.getStringExtra(ForgotPasswordActivity.EXTRA_EMAIL);
+                etEmail.setText(email);
             }
         }
     }
