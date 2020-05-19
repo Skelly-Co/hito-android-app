@@ -1,4 +1,4 @@
-package com.skellyco.hito.view;
+package com.skellyco.hito.view.entry;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
