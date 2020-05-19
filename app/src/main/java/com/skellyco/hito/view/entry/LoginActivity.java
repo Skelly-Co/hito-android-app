@@ -23,10 +23,11 @@ import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.view.main.MainActivity;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
 import com.skellyco.hito.view.util.ViewHelper;
-import com.skellyco.hito.viewmodel.LoginViewModel;
+import com.skellyco.hito.viewmodel.entry.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 

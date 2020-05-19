@@ -1,4 +1,4 @@
-package com.skellyco.hito.view.entry;
+package com.skellyco.hito.view.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 

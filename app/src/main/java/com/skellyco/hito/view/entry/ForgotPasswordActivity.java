@@ -27,7 +27,7 @@ import com.skellyco.hito.core.shared.error.ResetPasswordError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
 import com.skellyco.hito.view.util.ViewHelper;
-import com.skellyco.hito.viewmodel.ForgotPasswordViewModel;
+import com.skellyco.hito.viewmodel.entry.ForgotPasswordViewModel;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

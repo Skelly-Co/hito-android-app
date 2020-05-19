@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppDarkTheme">
-        <activity android:name=".view.entry.MainActivity"/>
+        <activity android:name=".view.main.MainActivity"/>
         <activity
             android:name=".view.entry.SplashActivity"
             android:theme="@style/AppDarkTheme.Launcher">

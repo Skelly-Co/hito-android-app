@@ -8,12 +8,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,7 +26,7 @@ import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.view.util.LiveDataUtil;
 import com.skellyco.hito.view.util.ViewHelper;
-import com.skellyco.hito.viewmodel.CreateAccountViewModel;
+import com.skellyco.hito.viewmodel.entry.CreateAccountViewModel;
 
 public class CreateAccountActivity extends AppCompatActivity {
 

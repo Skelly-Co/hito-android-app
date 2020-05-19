@@ -1,4 +1,4 @@
-package com.skellyco.hito.viewmodel;
+package com.skellyco.hito.viewmodel.entry;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
