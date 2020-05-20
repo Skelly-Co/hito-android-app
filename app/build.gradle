@@ -45,6 +45,9 @@ dependencies {
     //Slidable Activities
     implementation 'com.r0adkll:slidableactivity:2.1.0'
 
+    //CircularImageView
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
     //Firebase
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'

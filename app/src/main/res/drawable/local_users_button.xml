@@ -7,10 +7,10 @@
         android:top="10dp">
         <selector xmlns:android="http://schemas.android.com/apk/res/android">
             <item android:state_checked="true"
-                android:drawable="@drawable/local_active" />
+                android:drawable="@drawable/local_users_active" />
 
             <item android:state_checked="false"
-                android:drawable="@drawable/local_inactive" />
+                android:drawable="@drawable/local_users_inactive" />
         </selector>
     </item>
 </layer-list>
