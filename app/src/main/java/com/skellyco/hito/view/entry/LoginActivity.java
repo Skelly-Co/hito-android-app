@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,9 +24,13 @@ import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.LoginError;
+import com.skellyco.hito.core.util.security.Decryptor;
+import com.skellyco.hito.core.util.security.EncryptionResult;
+import com.skellyco.hito.core.util.security.Encryptor;
 import com.skellyco.hito.view.main.MainActivity;
 import com.skellyco.hito.view.util.AlertBuilder;
-import com.skellyco.hito.view.util.LiveDataUtil;
+import com.skellyco.hito.core.util.LiveDataUtil;
+import com.skellyco.hito.view.util.LoginDataManager;
 import com.skellyco.hito.view.util.ViewHelper;
 import com.skellyco.hito.viewmodel.entry.LoginViewModel;
 
@@ -33,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
     public static final int CREATE_ACCOUNT_ACTIVITY = 1;
-    public static final int FORGOT_PASSWORD_ACTIVITY = 1;
+    public static final int FORGOT_PASSWORD_ACTIVITY = 2;
 
     private ScrollView scrMainContainer;
     private EditText etEmail;
@@ -46,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout relLoadingPanel;
 
     private LoginViewModel loginViewModel;
+    private LoginDataManager loginDataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         initializeViews();
         initializeListeners();
         initializeViewModel();
+        initializeLoginDataManager();
     }
 
     private void initializeViews()
@@ -102,7 +109,12 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
-    private void login(LoginDTO loginDTO)
+    private void initializeLoginDataManager()
+    {
+        loginDataManager = new LoginDataManager(this);
+    }
+
+    private void login(final LoginDTO loginDTO)
     {
         clearErrors();
         showLoading();
@@ -110,14 +122,16 @@ public class LoginActivity extends AppCompatActivity {
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {
-                hideLoading();
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
+                    loginDataManager.saveLoginData(loginDTO);
+                    hideLoading();
                     startMainActivity();
                     finish();
                 }
                 else
                 {
+                    hideLoading();
                     displayError(resource.getError());
                 }
             }

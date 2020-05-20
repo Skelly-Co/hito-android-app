@@ -114,8 +114,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
                 }
                 else
                 {
-                    //handle error
-                    Log.e(TAG, task.getException().toString());
+                    String errorMessage = task.getException().getMessage();
+                    ResetPasswordError resetPasswordError = ErrorResolver.resolveResetPasswordError(errorMessage);
+                    Resource<Void, ResetPasswordError> resource = new Resource<>(Resource.Status.ERROR, null, resetPasswordError);
+                    resetPasswordResource.setValue(resource);
                 }
             }
         });

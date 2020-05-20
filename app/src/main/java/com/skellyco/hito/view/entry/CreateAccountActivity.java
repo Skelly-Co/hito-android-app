@@ -24,7 +24,7 @@ import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.view.util.AlertBuilder;
-import com.skellyco.hito.view.util.LiveDataUtil;
+import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.view.util.ViewHelper;
 import com.skellyco.hito.viewmodel.entry.CreateAccountViewModel;
 

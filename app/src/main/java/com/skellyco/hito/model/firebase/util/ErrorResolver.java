@@ -72,7 +72,27 @@ public class ErrorResolver {
 
     public static ResetPasswordError resolveResetPasswordError(String errorMessage)
     {
-        return null;
+        ResetPasswordError resetPasswordError = new ResetPasswordError();
+        switch (errorMessage)
+        {
+            case "There is no user record corresponding to this identifier. The user may have been deleted.":
+            {
+                resetPasswordError.setType(ResetPasswordError.Type.EMAIL_NOT_FOUND);
+                break;
+            }
+            case "A network error (such as timeout, interrupted connection or unreachable host) has occurred.":
+            {
+                resetPasswordError.setType(ResetPasswordError.Type.NETWORK_ERROR);
+                break;
+            }
+            default:
+            {
+                Log.e(TAG, errorMessage);
+                resetPasswordError.setType(ResetPasswordError.Type.UNKNOWN);
+                break;
+            }
+        }
+        return resetPasswordError;
     }
 
 }

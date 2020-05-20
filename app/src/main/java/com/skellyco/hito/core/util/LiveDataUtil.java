@@ -1,4 +1,4 @@
-package com.skellyco.hito.view.util;
+package com.skellyco.hito.core.util;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;

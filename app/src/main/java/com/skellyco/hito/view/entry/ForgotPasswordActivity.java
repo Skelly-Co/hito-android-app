@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
@@ -25,7 +28,7 @@ import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.ResetPasswordError;
 import com.skellyco.hito.view.util.AlertBuilder;
-import com.skellyco.hito.view.util.LiveDataUtil;
+import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.view.util.ViewHelper;
 import com.skellyco.hito.viewmodel.entry.ForgotPasswordViewModel;
 
@@ -99,14 +102,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 hideLoading();
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
-                    displaySuccessInformation();
+                    displaySuccessInformation(resetPasswordDTO);
                     ////Closing Activity in is slightly delayed here for a better user experience.
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             goBackToLoginActivity(resetPasswordDTO);
                         }
-                    }, 300);
+                    }, 500);
                 }
                 else
                 {
@@ -177,9 +180,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         errorDialog.show();
     }
 
-    private void displaySuccessInformation()
+    private void displaySuccessInformation(ResetPasswordDTO resetPasswordDTO)
     {
-
+        Toast toast = Toast.makeText(getApplicationContext(),
+                Html.fromHtml("We sent instructions to change your password to " + "<b>" + resetPasswordDTO.getEmail() + "</b>. " +
+                        "Please check both your inbox and spam folder."),
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 200);
+        toast.show();
     }
 
     private void goBackToLoginActivity(ResetPasswordDTO resetPasswordDTO)
