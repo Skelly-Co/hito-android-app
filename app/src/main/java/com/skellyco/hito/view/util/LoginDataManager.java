@@ -70,4 +70,12 @@ public class LoginDataManager {
             return null;
         }
     }
+
+    public void clearSavedLoginData()
+    {
+        editor.remove(EMAIL_PREF);
+        editor.remove(PASSWORD_PREF);
+        editor.remove(IV_PREF);
+        editor.commit();
+    }
 }
