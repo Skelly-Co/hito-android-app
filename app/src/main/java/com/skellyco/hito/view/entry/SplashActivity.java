@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
@@ -26,7 +28,6 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppDarkTheme);
         super.onCreate(savedInstanceState);
 
         initializeViewModel();

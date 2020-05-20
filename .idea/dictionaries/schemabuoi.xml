@@ -4,7 +4,9 @@
       <w>decryptor</w>
       <w>encryptor</w>
       <w>firestore</w>
+      <w>navbar</w>
       <w>slidr</w>
+      <w>topbar</w>
     </words>
   </dictionary>
 </component>

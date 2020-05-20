@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp">
+        <selector xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:state_checked="true"
+                android:drawable="@drawable/history_active" />
+
+            <item android:state_checked="false"
+                android:drawable="@drawable/history_inactive" />
+        </selector>
+    </item>
+</layer-list>
