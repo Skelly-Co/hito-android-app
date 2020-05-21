@@ -3,6 +3,7 @@ package com.skellyco.hito.model.firebase;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,7 +36,7 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public MutableLiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
+    public LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
     {
         final MutableLiveData<Resource<String, LoginError>> loginResource = new MutableLiveData<>();
         authenticationDAO.login(loginDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -60,7 +61,7 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public MutableLiveData<Resource<Void, CreateAccountError>> createAccount(final CreateAccountDTO createAccountDTO)
+    public LiveData<Resource<Void, CreateAccountError>> createAccount(final CreateAccountDTO createAccountDTO)
     {
         final MutableLiveData<Resource<Void, CreateAccountError>> createAccountResource = new MutableLiveData<>();
         authenticationDAO.createAccount(createAccountDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -82,7 +83,7 @@ public class AuthenticationRepository implements IAuthenticationRepository {
                             {
                                 Log.e(TAG, task.getException().getMessage());
                                 CreateAccountError error = new CreateAccountError(CreateAccountError.Type.UNKNOWN);
-                                Resource<Void, CreateAccountError> resource = new Resource<>(Resource.Status.SUCCESS, null, error);
+                                Resource<Void, CreateAccountError> resource = new Resource<>(Resource.Status.ERROR, null, error);
                                 createAccountResource.setValue(resource);
                             }
                         }
@@ -101,7 +102,7 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public MutableLiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO)
+    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO)
     {
         final MutableLiveData<Resource<Void, ResetPasswordError>> resetPasswordResource = new MutableLiveData<>();
         authenticationDAO.resetPassword(resetPasswordDTO).addOnCompleteListener(new OnCompleteListener<Void>() {
