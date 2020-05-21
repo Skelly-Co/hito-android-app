@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -12,10 +14,14 @@ import android.widget.RadioButton;
 import com.skellyco.hito.R;
 import com.skellyco.hito.view.entry.LoginActivity;
 import com.skellyco.hito.view.util.LoginDataManager;
+import com.skellyco.hito.view.util.animation.ResizeWidthAnimation;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int SETTINGS_POPUP_ANIM_DURATION = 350;
+    private static final int SETTINGS_POPUP_HIDDEN_WIDTH = 1;
 
     private CircleImageView imgProfilePicture;
     private LinearLayout linSettingsPopup;
@@ -26,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rbtHistory;
 
     private LoginDataManager loginDataManager;
+    private int settingsPopupWidth;
+    private boolean settingsPopupShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         initializeViews();
         initializeListeners();
         initializeLoginDataManager();
+        initializeSettingsPopup();
     }
 
     private void initializeViews()
@@ -50,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeListeners()
     {
+        imgProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSettingsPopup();
+            }
+        });
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
         loginDataManager = new LoginDataManager(this);
     }
 
+    private void initializeSettingsPopup()
+    {
+        settingsPopupWidth = linSettingsPopup.getLayoutParams().width;
+        linSettingsPopup.getLayoutParams().width = SETTINGS_POPUP_HIDDEN_WIDTH;
+        linSettingsPopup.requestLayout();
+    }
+
     private void loadGroups()
     {
 
@@ -94,6 +116,34 @@ public class MainActivity extends AppCompatActivity {
     private void loadHistory()
     {
 
+    }
+
+    private void toggleSettingsPopup()
+    {
+        if(settingsPopupShown)
+        {
+            hideSettingsPopup();
+        }
+        else
+        {
+            showSettingsPopup();
+        }
+    }
+
+    private void showSettingsPopup()
+    {
+        settingsPopupShown = true;
+        ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, settingsPopupWidth);
+        resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
+        linSettingsPopup.startAnimation(resizeAnimation);
+    }
+
+    private void hideSettingsPopup()
+    {
+        settingsPopupShown = false;
+        ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, SETTINGS_POPUP_HIDDEN_WIDTH);
+        resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
+        linSettingsPopup.startAnimation(resizeAnimation);
     }
 
     private void logout()
