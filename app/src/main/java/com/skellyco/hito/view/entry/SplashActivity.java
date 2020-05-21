@@ -56,13 +56,13 @@ public class SplashActivity extends AppCompatActivity {
 
     private void login(LoginDTO loginDTO)
     {
-        LiveData<Resource<String, LoginError>> loginResource = splashViewModel.login(loginDTO);
+        final LiveData<Resource<String, LoginError>> loginResource = splashViewModel.login(loginDTO);
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
-                    startMainActivity();
+                    startMainActivity(resource.getData());
                 }
                 else
                 {
@@ -80,9 +80,10 @@ public class SplashActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
-    private void startMainActivity()
+    private void startMainActivity(String uid)
     {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.EXTRA_UID, uid);
         startActivity(intent);
     }
 

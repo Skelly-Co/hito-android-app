@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,9 +23,6 @@ import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.dto.LoginDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.LoginError;
-import com.skellyco.hito.core.util.security.Decryptor;
-import com.skellyco.hito.core.util.security.EncryptionResult;
-import com.skellyco.hito.core.util.security.Encryptor;
 import com.skellyco.hito.view.main.MainActivity;
 import com.skellyco.hito.view.util.AlertBuilder;
 import com.skellyco.hito.core.util.LiveDataUtil;
@@ -126,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     loginDataManager.saveLoginData(loginDTO);
                     hideLoading();
-                    startMainActivity();
+                    startMainActivity(resource.getData());
                     finish();
                 }
                 else
@@ -257,9 +253,10 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
-    private void startMainActivity()
+    private void startMainActivity(String uid)
     {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.EXTRA_UID, uid);
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
