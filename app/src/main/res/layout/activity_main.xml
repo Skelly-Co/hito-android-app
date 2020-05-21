@@ -111,7 +111,8 @@
         android:hint="@string/Search"
         android:textColorHint="?attr/colorTextContrast"
         android:textCursorDrawable="@null"
-        android:background="@drawable/search_bar" />
+        android:background="@drawable/search_bar"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:layout_width="20dp"
