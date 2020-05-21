@@ -35,10 +35,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // ViewModel & LiveData
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-
     //Scalable text
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
 
@@ -48,13 +44,20 @@ dependencies {
     //CircularImageView
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
-    //Firebase
-    implementation 'com.google.firebase:firebase-auth:19.3.1'
-    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    //RecyclerView
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
 
     //Validators
     implementation ('commons-validator:commons-validator:1.4.1') {
         exclude module: 'commons-collections'
     }
+
+    // ViewModel & LiveData
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
 
 }
