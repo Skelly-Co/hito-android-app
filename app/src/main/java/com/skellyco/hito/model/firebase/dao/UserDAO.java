@@ -1,6 +1,7 @@
 package com.skellyco.hito.model.firebase.dao;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.skellyco.hito.core.entity.User;
@@ -12,9 +13,13 @@ public class UserDAO {
 
     private FirebaseFirestore firestore;
 
-    public UserDAO()
-    {
+    public UserDAO() {
         firestore = FirebaseFirestore.getInstance();
+    }
+
+    public CollectionReference getUsers()
+    {
+        return firestore.collection(USERS_COLLECTION);
     }
 
     public DocumentReference getUser(String uid)
