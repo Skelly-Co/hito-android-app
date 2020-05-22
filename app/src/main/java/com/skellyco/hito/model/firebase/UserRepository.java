@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skellyco.hito.core.domain.IUserRepository;
 import com.skellyco.hito.core.entity.User;
@@ -23,7 +24,8 @@ public class UserRepository implements IUserRepository {
 
     private UserDAO userDAO;
     private String loggedInUid;
-    private MutableLiveData<Resource<List<User>, FetchDataError>> localUsers = new MutableLiveData<>();
+    private MutableLiveData<Resource<List<User>, FetchDataError>> localUsers;
+    private ListenerRegistration localUsersListener;
 
     public UserRepository()
     {
@@ -33,16 +35,25 @@ public class UserRepository implements IUserRepository {
     @Override
     public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(String uid)
     {
-        if(localUsers == null || (loggedInUid == null || !loggedInUid.equals(uid)))
+        // We want to add snapshot listener only on first invocation or if logged in user changed.
+        if(localUsers == null || loggedInUid == null || !loggedInUid.equals(uid))
         {
+            if(localUsers == null)
+            {
+                localUsers = new MutableLiveData<>();
+            }
+            // If logged in user changed we have to remove old snapshot listener and update loggedInUid variable
+            if(loggedInUid != null && !loggedInUid.equals(uid))
+            {
+                localUsersListener.remove();
+            }
             loggedInUid = uid;
-            userDAO.getUsers().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            localUsersListener = userDAO.getUsers().addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if(e == null)
                     {
                         List<User> users = queryDocumentSnapshots.toObjects(User.class);
-                        Log.e(TAG, users.toString());
                         Resource<List<User>, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, users, null);
                         localUsers.setValue(resource);
                     }
