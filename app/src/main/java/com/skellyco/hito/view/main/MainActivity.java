@@ -3,21 +3,25 @@ package com.skellyco.hito.view.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.skellyco.hito.R;
 import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.view.entry.LoginActivity;
+import com.skellyco.hito.view.main.adapter.UserAdapter;
 import com.skellyco.hito.view.util.LoginDataManager;
 import com.skellyco.hito.view.util.animation.ResizeWidthAnimation;
 import com.skellyco.hito.viewmodel.main.MainViewModel;
@@ -41,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linSettingsPopup;
     private ImageButton btnLogout;
     private ImageButton btnSettings;
+    private EditText etSearch;
+    private RecyclerView recChatList;
     private RadioButton rbtGroups;
     private RadioButton rbtLocalUsers;
     private RadioButton rbtHistory;
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String loggedInUid;
     private Observer<Resource<List<User>, FetchDataError>> localUsersObserver;
+    private UserAdapter localUsersAdapter;
     private NavbarItem selectedNavbarItem;
     private int settingsPopupWidth;
     private boolean settingsPopupShown = false;
@@ -65,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
         initializeListeners();
         initializeViewModel();
         initializeLoginDataManager();
+        initializeRecyclerViewAndAdapters();
         initializeChatListObservers();
-//        rbtLocalUsers.performClick();
+        rbtLocalUsers.performClick();
     }
 
     private void initializeViews()
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         linSettingsPopup = findViewById(R.id.linSettingsPopup);
         btnLogout = findViewById(R.id.btnLogout);
         btnSettings = findViewById(R.id.btnSettings);
+        etSearch = findViewById(R.id.etSearch);
+        recChatList = findViewById(R.id.recChatList);
         rbtGroups = findViewById(R.id.rbtGroups);
         rbtLocalUsers = findViewById(R.id.rbtLocalUsers);
         rbtHistory = findViewById(R.id.rbtHistory);
@@ -99,6 +109,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filterChatList(s.toString());
             }
         });
         rbtGroups.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +169,13 @@ public class MainActivity extends AppCompatActivity {
         loginDataManager = new LoginDataManager(this);
     }
 
+    private void initializeRecyclerViewAndAdapters()
+    {
+        recChatList.setLayoutManager(new LinearLayoutManager(this));
+        recChatList.setHasFixedSize(true);
+        localUsersAdapter = new UserAdapter();
+    }
+
     private void initializeChatListObservers()
     {
         localUsersObserver = new Observer<Resource<List<User>, FetchDataError>>()
@@ -152,13 +185,32 @@ public class MainActivity extends AppCompatActivity {
             {
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
-                    //TO DO - update recycler view adapter
+                    localUsersAdapter.submitList(resource.getData());
                 }
                 // For right now I have not discovered any possible errors that can happen during fetching the data.
                 // If some error will occur, it will be logged in domain layer so it won't pass unnoticed.
                 // If this will happen, I will update error handling for FetchDataError both in domain and here.
             }
         };
+    }
+
+    private void filterChatList(String filter)
+    {
+        switch (selectedNavbarItem)
+        {
+            case GROUPS:
+            {
+                //TO DO - filter groups
+            }
+            case LOCAL_USERS:
+            {
+                localUsersAdapter.updateFilter(filter);
+            }
+            case HISTORY:
+            {
+                //TO DO - filter history
+            }
+        }
     }
 
     private void loadGroups()
@@ -184,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         {
             //TO DO - stop observing history
         }
+        recChatList.setAdapter(localUsersAdapter);
         mainViewModel.getLocalUsers(loggedInUid).observe(this, localUsersObserver);
     }
 
