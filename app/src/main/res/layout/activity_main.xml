@@ -34,7 +34,7 @@
 
     <LinearLayout
         android:id="@+id/linSettingsPopup"
-        android:layout_width="156dp"
+        android:layout_width="146dp"
         android:layout_height="56dp"
         app:layout_constraintTop_toTopOf="@id/imgProfilePicture"
         app:layout_constraintBottom_toBottomOf="@id/imgProfilePicture"
@@ -47,10 +47,10 @@
 
         <ImageButton
             android:id="@+id/btnLogout"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="22dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/logout"
             android:visibility="visible">
 
@@ -58,8 +58,8 @@
 
         <ImageButton
             android:id="@+id/btnSettings"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/settings"
             android:visibility="visible">
 
