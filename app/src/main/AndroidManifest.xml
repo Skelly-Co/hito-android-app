@@ -11,7 +11,8 @@
         android:theme="@style/AppDarkTheme">
         <activity
             android:name=".view.main.MainActivity"
-            android:theme="@style/AppDarkTheme"/>
+            android:theme="@style/AppDarkTheme"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".view.entry.SplashActivity"
             android:theme="@style/AppDarkTheme.Launcher">
