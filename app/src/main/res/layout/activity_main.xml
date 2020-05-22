@@ -103,8 +103,8 @@
         app:layout_constraintStart_toStartOf="@id/vwChatListContainer"
         app:layout_constraintEnd_toEndOf="@id/vwChatListContainer"
         android:layout_marginTop="22dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:inputType="text"
         android:paddingStart="44dp"
         android:paddingEnd="12dp"
@@ -128,6 +128,7 @@
         app:layout_constraintLeft_toLeftOf="@id/etSearch"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recChatList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/etSearch"
@@ -135,8 +136,7 @@
         tools:listitem="@layout/chat_list_item"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp">
+        android:overScrollMode="never">
 
     </androidx.recyclerview.widget.RecyclerView>
 
