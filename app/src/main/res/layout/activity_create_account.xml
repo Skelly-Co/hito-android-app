@@ -22,8 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/back"
-            android:background="@null"
+            android:background="@drawable/back"
             android:scaleType="fitXY">
 
         </ImageButton>
