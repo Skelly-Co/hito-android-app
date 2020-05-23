@@ -20,14 +20,20 @@ import java.util.List;
 
 public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(User user);
+    }
+
     class UserHolder extends RecyclerView.ViewHolder
     {
+        private User user;
         private TextView tvDisplayName;
 
         public UserHolder(@NonNull View itemView)
         {
             super(itemView);
             initializeViews();
+            initializeListener();
         }
 
         private void initializeViews()
@@ -35,10 +41,27 @@ public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
             tvDisplayName = itemView.findViewById(R.id.tvDisplayName);
         }
 
+        private void initializeListener()
+        {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null && position != RecyclerView.NO_POSITION)
+                    {
+                        listener.onItemClick(user);
+                    }
+                }
+            });
+        }
+
         public void setView(User user)
         {
+            this.user = user;
             tvDisplayName.setText(user.getUsername());
         }
+
+
     }
 
     private static DiffUtil.ItemCallback<User> DIFF_CALLBACK = new DiffUtil.ItemCallback<User>() {
@@ -56,6 +79,7 @@ public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
     private String filter = "";
     private List<User> unfilteredList = new ArrayList<>();
     private List<User> filteredList = new ArrayList<>();
+    private OnItemClickListener listener;
 
     public UserAdapter()
     {
@@ -78,15 +102,13 @@ public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
     @Override
     public void submitList(@Nullable List<User> list) {
         unfilteredList = list;
-        if(filter == null || filter.isEmpty())
-        {
-            super.submitList(list);
-        }
-        else
-        {
-            filteredList = ListFilter.filterUserList(unfilteredList, filter);
-            super.submitList(filteredList);
-        }
+        filteredList = ListFilter.filterUserList(unfilteredList, filter);
+        super.submitList(filteredList);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
+        this.listener = listener;
     }
 
     public void updateFilter(String filter)
