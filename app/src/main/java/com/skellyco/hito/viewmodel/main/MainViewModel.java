@@ -1,5 +1,7 @@
 package com.skellyco.hito.viewmodel.main;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -14,14 +16,30 @@ import java.util.List;
 public class MainViewModel extends ViewModel {
 
     private IUserService userService;
+    private String loggedInUid;
+    private LiveData<Resource<List<User>, FetchDataError>> localUsers;
 
     public MainViewModel()
     {
         this.userService = DependencyProvider.getUserService();
     }
 
-    public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(String uid)
+    public void setLoggedInUid(String uid)
     {
-        return userService.getLocalUsers(uid);
+        this.loggedInUid = uid;
+    }
+
+    public String getLoggedInUid()
+    {
+        return loggedInUid;
+    }
+
+    public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(Activity activity)
+    {
+        if(localUsers == null)
+        {
+            localUsers = userService.getLocalUsers(activity, loggedInUid);
+        }
+        return localUsers;
     }
 }

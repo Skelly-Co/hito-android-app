@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
     private LoginDataManager loginDataManager;
 
-    private String loggedInUid;
     private Observer<Resource<List<User>, FetchDataError>> localUsersObserver;
     private UserAdapter localUsersAdapter;
     private NavbarItem selectedNavbarItem;
@@ -65,17 +65,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loggedInUid = getIntent().getStringExtra(EXTRA_UID);
+        String loggedInUid = getIntent().getStringExtra(EXTRA_UID);
 
         initializeViews();
         initializeSettingsPopup();
         initializeListeners();
-        initializeViewModel();
+        initializeViewModel(loggedInUid);
         initializeLoginDataManager();
         initializeRecyclerViewAndAdapters();
         initializeChatListObservers();
         rbtLocalUsers.performClick();
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        switch(selectedNavbarItem)
+//        {
+//            case GROUPS:
+//            {
+//
+//            }
+//            case LOCAL_USERS:
+//            {
+//
+//            }
+//            case HISTORY:
+//            {
+//
+//            }
+//            default:
+//            {
+//
+//            }
+//        }
+//    }
 
     private void initializeViews()
     {
@@ -159,9 +183,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeViewModel()
+    private void initializeViewModel(String loggedInUid)
     {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.setLoggedInUid(loggedInUid);
     }
 
     private void initializeLoginDataManager()
@@ -174,6 +199,12 @@ public class MainActivity extends AppCompatActivity {
         recChatList.setLayoutManager(new LinearLayoutManager(this));
         recChatList.setHasFixedSize(true);
         localUsersAdapter = new UserAdapter();
+        localUsersAdapter.setOnItemClickListener(new UserAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(User user) {
+                startChatActivity(mainViewModel.getLoggedInUid(), user.getUid());
+            }
+        });
     }
 
     private void initializeChatListObservers()
@@ -211,13 +242,21 @@ public class MainActivity extends AppCompatActivity {
                 //TO DO - filter history
             }
         }
+        // Scrolling to the top of the list has to be delayed to wait for the recycler view to update.
+        // Even though using fixed delay is not desirable, this is the only working solution.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recChatList.scrollToPosition(0);
+            }
+        }, 150);
     }
 
     private void loadGroups()
     {
         if(selectedNavbarItem == NavbarItem.LOCAL_USERS)
         {
-            mainViewModel.getLocalUsers(loggedInUid).removeObserver(localUsersObserver);
+            mainViewModel.getLocalUsers(this).removeObserver(localUsersObserver);
         }
         else if (selectedNavbarItem == NavbarItem.HISTORY)
         {
@@ -237,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
             //TO DO - stop observing history
         }
         recChatList.setAdapter(localUsersAdapter);
-        mainViewModel.getLocalUsers(loggedInUid).observe(this, localUsersObserver);
+        mainViewModel.getLocalUsers(this).observe(this, localUsersObserver);
     }
 
     private void loadHistory()
@@ -248,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(selectedNavbarItem == NavbarItem.LOCAL_USERS)
         {
-            mainViewModel.getLocalUsers(loggedInUid).removeObserver(localUsersObserver);
+            mainViewModel.getLocalUsers(this).removeObserver(localUsersObserver);
         }
         //TO DO - start observing history
     }
@@ -288,5 +327,14 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_in_left, R.anim.activity_slide_out_right);
         finish();
+    }
+
+    private void startChatActivity(String loggedInUid, String interlocutorId)
+    {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra(ChatActivity.EXTRA_LOGGED_IN_UID, loggedInUid);
+        intent.putExtra(ChatActivity.EXTRA_INTERLOCUTOR_UID, interlocutorId);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 }
