@@ -9,10 +9,12 @@
         android:roundIcon="@mipmap/ic_hito"
         android:supportsRtl="true"
         android:theme="@style/AppDarkTheme">
+        <activity android:name=".view.main.ChatActivity"
+            android:theme="@style/AppDarkTheme.SlidrActivityTheme"/>
         <activity
             android:name=".view.main.MainActivity"
             android:theme="@style/AppDarkTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.entry.SplashActivity"
             android:theme="@style/AppDarkTheme.Launcher">
@@ -24,7 +26,7 @@
         </activity>
         <activity
             android:name=".view.entry.LoginActivity"
-            android:theme="@style/AppDarkTheme"/>
+            android:theme="@style/AppDarkTheme" />
         <activity
             android:name=".view.entry.CreateAccountActivity"
             android:theme="@style/AppDarkTheme.SlidrActivityTheme" />
