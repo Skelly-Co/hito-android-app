@@ -1,5 +1,7 @@
 package com.skellyco.hito.core.application.service;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.application.IUserService;
@@ -20,8 +22,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(String uid)
+    public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(Activity activity, String uid)
     {
-        return userRepository.getLocalUsers(uid);
+        return userRepository.getLocalUsers(activity, uid);
     }
 }

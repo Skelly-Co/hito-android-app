@@ -1,5 +1,7 @@
 package com.skellyco.hito.core.domain;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.entity.User;
@@ -10,5 +12,5 @@ import java.util.List;
 
 public interface IUserRepository {
 
-    LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(String uid);
+    LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(Activity activity, String uid);
 }

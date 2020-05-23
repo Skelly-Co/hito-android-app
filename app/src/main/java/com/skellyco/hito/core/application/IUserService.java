@@ -1,5 +1,7 @@
 package com.skellyco.hito.core.application;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.entity.User;
@@ -10,6 +12,6 @@ import java.util.List;
 
 public interface IUserService {
 
-    LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(String uid);
+    LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(Activity activity, String uid);
 
 }
