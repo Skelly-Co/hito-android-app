@@ -29,6 +29,12 @@ public class MainViewModel extends ViewModel {
         this.loggedInUid = uid;
     }
 
+    public void fetchData(Activity activity)
+    {
+        localUsers = userService.getLocalUsers(activity, loggedInUid);
+        //fetch groups & history
+    }
+
     public String getLoggedInUid()
     {
         return loggedInUid;
@@ -36,10 +42,6 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Resource<List<User>, FetchDataError>> getLocalUsers(Activity activity)
     {
-        if(localUsers == null)
-        {
-            localUsers = userService.getLocalUsers(activity, loggedInUid);
-        }
         return localUsers;
     }
 }

@@ -1,5 +1,6 @@
 package com.skellyco.hito.view.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -34,11 +34,35 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private enum NavbarItem {
-        GROUPS, LOCAL_USERS, HISTORY
+        GROUPS(0), LOCAL_USERS(1), HISTORY(2);
+
+        private final int value;
+
+        NavbarItem(int value)
+        {
+            this.value = value;
+        }
+
+        public int getValue()
+        {
+            return value;
+        }
+
+        public static NavbarItem getNavbarItem(int value)
+        {
+            NavbarItem[] navbarItems = NavbarItem.values();
+            if(value < 0 || value >= navbarItems.length)
+            {
+                return null;
+            }
+            return navbarItems[value];
+        }
     }
 
     public static final String TAG = "MainActivity";
     public static final String EXTRA_UID = "EXTRA_UID";
+    private static final String STATE_NAVBAR_ITEM = "STATE_NAVBAR_ITEM";
+    private static final String STATE_SETTINGS_POPUP_SHOWN = "SETTINGS_POPUP_SHOWN";
     private static final int SETTINGS_POPUP_ANIM_DURATION = 350;
     private static final int SETTINGS_POPUP_HIDDEN_WIDTH = 1;
 
@@ -68,38 +92,14 @@ public class MainActivity extends AppCompatActivity {
         String loggedInUid = getIntent().getStringExtra(EXTRA_UID);
 
         initializeViews();
-        initializeSettingsPopup();
-        initializeListeners();
         initializeViewModel(loggedInUid);
-        initializeLoginDataManager();
+        initializeListeners();
+        initializeSettingsPopup();
         initializeRecyclerViewAndAdapters();
         initializeChatListObservers();
-        rbtLocalUsers.performClick();
+        initializeLoginDataManager();
+        setUpStartingState(savedInstanceState);
     }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        switch(selectedNavbarItem)
-//        {
-//            case GROUPS:
-//            {
-//
-//            }
-//            case LOCAL_USERS:
-//            {
-//
-//            }
-//            case HISTORY:
-//            {
-//
-//            }
-//            default:
-//            {
-//
-//            }
-//        }
-//    }
 
     private void initializeViews()
     {
@@ -114,11 +114,10 @@ public class MainActivity extends AppCompatActivity {
         rbtHistory = findViewById(R.id.rbtHistory);
     }
 
-    private void initializeSettingsPopup()
+    private void initializeViewModel(String loggedInUid)
     {
-        settingsPopupWidth = linSettingsPopup.getLayoutParams().width;
-        linSettingsPopup.getLayoutParams().width = SETTINGS_POPUP_HIDDEN_WIDTH;
-        linSettingsPopup.requestLayout();
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.setLoggedInUid(loggedInUid);
     }
 
     private void initializeListeners()
@@ -151,11 +150,13 @@ public class MainActivity extends AppCompatActivity {
                 filterChatList(s.toString());
             }
         });
+
         rbtGroups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(selectedNavbarItem != NavbarItem.GROUPS)
                 {
+                    removeChatListObserver();
                     loadGroups();
                     selectedNavbarItem = NavbarItem.GROUPS;
                 }
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(selectedNavbarItem != NavbarItem.LOCAL_USERS)
                 {
+                    removeChatListObserver();
                     loadLocalUsers();
                     selectedNavbarItem = NavbarItem.LOCAL_USERS;
                 }
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(selectedNavbarItem != NavbarItem.HISTORY)
                 {
+                    removeChatListObserver();
                     loadHistory();
                     selectedNavbarItem = NavbarItem.HISTORY;
                 }
@@ -183,15 +186,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeViewModel(String loggedInUid)
+    private void initializeSettingsPopup()
     {
-        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        mainViewModel.setLoggedInUid(loggedInUid);
-    }
-
-    private void initializeLoginDataManager()
-    {
-        loginDataManager = new LoginDataManager(this);
+        settingsPopupWidth = linSettingsPopup.getLayoutParams().width;
+        linSettingsPopup.getLayoutParams().width = SETTINGS_POPUP_HIDDEN_WIDTH;
+        linSettingsPopup.requestLayout();
     }
 
     private void initializeRecyclerViewAndAdapters()
@@ -225,6 +224,65 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    private void initializeLoginDataManager()
+    {
+        loginDataManager = new LoginDataManager(this);
+    }
+
+    private void setUpStartingState(Bundle savedInstanceState)
+    {
+        if(savedInstanceState != null)
+        {
+            boolean showPopup = savedInstanceState.getBoolean(STATE_SETTINGS_POPUP_SHOWN, false);
+            if(showPopup)
+            {
+                showSettingsPopup(false);
+            }
+
+            int navbarItemValue = savedInstanceState.getInt(STATE_NAVBAR_ITEM, NavbarItem.LOCAL_USERS.getValue());
+            selectedNavbarItem = NavbarItem.getNavbarItem(navbarItemValue);
+
+        }
+        else
+        {
+            selectedNavbarItem = NavbarItem.LOCAL_USERS;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mainViewModel.fetchData(this);
+        switch(selectedNavbarItem)
+        {
+            case GROUPS:
+            {
+                rbtGroups.setChecked(true);
+                loadGroups();
+                break;
+            }
+            case LOCAL_USERS:
+            {
+                rbtLocalUsers.setChecked(true);
+                loadLocalUsers();
+                break;
+            }
+            case HISTORY:
+            {
+                rbtHistory.setChecked(true);
+                loadHistory();
+                break;
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_NAVBAR_ITEM, selectedNavbarItem.getValue());
+        outState.putBoolean(STATE_SETTINGS_POPUP_SHOWN, settingsPopupShown);
+    }
+
     private void filterChatList(String filter)
     {
         switch (selectedNavbarItem)
@@ -232,92 +290,103 @@ public class MainActivity extends AppCompatActivity {
             case GROUPS:
             {
                 //TO DO - filter groups
+                break;
             }
             case LOCAL_USERS:
             {
                 localUsersAdapter.updateFilter(filter);
+                break;
             }
             case HISTORY:
             {
                 //TO DO - filter history
+                break;
             }
         }
-        // Scrolling to the top of the list has to be delayed to wait for the recycler view to update.
-        // Even though using fixed delay is not desirable, this is the only working solution.
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                recChatList.scrollToPosition(0);
+    }
+
+    private void removeChatListObserver()
+    {
+        switch (selectedNavbarItem)
+        {
+            case GROUPS:
+            {
+                //TO DO - remove groups observer
+                break;
             }
-        }, 150);
+            case LOCAL_USERS:
+            {
+                mainViewModel.getLocalUsers(this).removeObserver(localUsersObserver);
+                break;
+            }
+            case HISTORY:
+            {
+                //TO DO - remove history observer
+                break;
+            }
+        }
     }
 
     private void loadGroups()
     {
-        if(selectedNavbarItem == NavbarItem.LOCAL_USERS)
-        {
-            mainViewModel.getLocalUsers(this).removeObserver(localUsersObserver);
-        }
-        else if (selectedNavbarItem == NavbarItem.HISTORY)
-        {
-            //TO DO - stop observing history
-        }
         //TO DO - start observing groups
+        recChatList.setAdapter(null);
     }
 
     private void loadLocalUsers()
     {
-        if(selectedNavbarItem == NavbarItem.GROUPS)
-        {
-            //TO DO - stop observing groups
-        }
-        else if(selectedNavbarItem == NavbarItem.HISTORY)
-        {
-            //TO DO - stop observing history
-        }
         recChatList.setAdapter(localUsersAdapter);
         mainViewModel.getLocalUsers(this).observe(this, localUsersObserver);
     }
 
     private void loadHistory()
     {
-        if(selectedNavbarItem == NavbarItem.GROUPS)
-        {
-            //TO DO - stop observing groups
-        }
-        else if(selectedNavbarItem == NavbarItem.LOCAL_USERS)
-        {
-            mainViewModel.getLocalUsers(this).removeObserver(localUsersObserver);
-        }
         //TO DO - start observing history
+        recChatList.setAdapter(null);
     }
 
     private void toggleSettingsPopup()
     {
         if(settingsPopupShown)
         {
-            hideSettingsPopup();
+            hideSettingsPopup(true);
         }
         else
         {
-            showSettingsPopup();
+            showSettingsPopup(true);
         }
     }
 
-    private void showSettingsPopup()
+    private void showSettingsPopup(boolean animate)
     {
         settingsPopupShown = true;
-        ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, settingsPopupWidth);
-        resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
-        linSettingsPopup.startAnimation(resizeAnimation);
+        if(animate)
+        {
+            ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, settingsPopupWidth);
+            resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
+            linSettingsPopup.startAnimation(resizeAnimation);
+        }
+        else
+        {
+            linSettingsPopup.getLayoutParams().width = settingsPopupWidth;
+            linSettingsPopup.requestLayout();
+        }
     }
 
-    private void hideSettingsPopup()
+    private void hideSettingsPopup(boolean animate)
     {
         settingsPopupShown = false;
-        ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, SETTINGS_POPUP_HIDDEN_WIDTH);
-        resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
-        linSettingsPopup.startAnimation(resizeAnimation);
+        if(animate)
+        {
+            ResizeWidthAnimation resizeAnimation = new ResizeWidthAnimation(linSettingsPopup, SETTINGS_POPUP_HIDDEN_WIDTH);
+            resizeAnimation.setDuration(SETTINGS_POPUP_ANIM_DURATION);
+            linSettingsPopup.startAnimation(resizeAnimation);
+        }
+        else
+        {
+            linSettingsPopup.getLayoutParams().width = SETTINGS_POPUP_HIDDEN_WIDTH;
+            linSettingsPopup.requestLayout();
+        }
     }
 
     private void logout()

@@ -7,9 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skellyco.hito.core.domain.IUserRepository;
 import com.skellyco.hito.core.entity.User;
@@ -29,6 +29,30 @@ public class UserRepository implements IUserRepository {
     public UserRepository()
     {
         userDAO = new UserDAO();
+    }
+
+    @Override
+    public LiveData<Resource<User, FetchDataError>> getUser(Activity activity, String uid) {
+        final MutableLiveData<Resource<User, FetchDataError>> userResource = new MutableLiveData<>();
+        userDAO.getUser(uid).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e == null)
+                {
+                    User user = documentSnapshot.toObject(User.class);
+                    Resource<User, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, user, null);
+                    userResource.setValue(resource);
+                }
+                else
+                {
+                    Log.e(TAG, e.getMessage());
+                    FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
+                    Resource<User, FetchDataError> resource = new Resource<>(Resource.Status.ERROR, userResource.getValue().getData(), error);
+                    userResource.setValue(resource);
+                }
+            }
+        });
+        return userResource;
     }
 
     @Override
