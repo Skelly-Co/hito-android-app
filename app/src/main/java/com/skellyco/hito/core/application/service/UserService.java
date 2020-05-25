@@ -22,7 +22,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LiveData<Resource<User, FetchDataError>> getUser(Activity activity, String uid) {
+    public LiveData<Resource<User, FetchDataError>> getUser(Activity activity, String uid)
+    {
         return userRepository.getUser(activity, uid);
     }
 
