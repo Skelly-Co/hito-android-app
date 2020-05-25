@@ -13,5 +13,7 @@
     <string name="Confirm">Confirm</string>
     <string name="Search">Search</string>
     <string name="placeholder_username">schemabuoi</string>
+    <string name="placeholder_date">14 May 2020 16:00</string>
     <string name="placeholder_message_to_username">Message to @schemabuoi</string>
+    <string name="placeholder_message_text">Hello greg here, how u doing?</string>
 </resources>
