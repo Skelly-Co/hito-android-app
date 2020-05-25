@@ -90,7 +90,7 @@ public class UserAdapter extends ListAdapter<User, UserAdapter.UserHolder> {
     @Override
     public UserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.chat_list_item, parent, false);
+                .inflate(R.layout.item_chat_list, parent, false);
         return new UserHolder(itemView);
     }
 
