@@ -1,12 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="schemabuoi">
     <words>
+      <w>conv</w>
       <w>decryptor</w>
       <w>encryptor</w>
       <w>firestore</w>
       <w>hito</w>
       <w>navbar</w>
+      <w>priv</w>
       <w>slidr</w>
+      <w>subcollection</w>
       <w>topbar</w>
     </words>
   </dictionary>
