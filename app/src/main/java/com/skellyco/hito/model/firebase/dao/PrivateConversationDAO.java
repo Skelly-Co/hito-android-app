@@ -12,6 +12,7 @@ public class PrivateConversationDAO {
     public static final String FIELD_SECOND_INTERLOCUTOR_ID = "secondInterlocutorId";
 
     private static  final String MESSAGES_SUBCOLLECTION = "messages";
+    public static final String MESSAGES_FIELD_ID = "id";
     public static final String MESSAGES_FIELD_INTERLOCUTOR_ID = "interlocutorId";
     public static final String MESSAGES_FIELD_POST_TIME = "postTime";
     public static final String MESSAGES_FIELD_TEXT = "text";

@@ -38,7 +38,9 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
     }
 
     @Override
-    public LiveData<Resource<PrivateConversation, FetchDataError>> getPrivateConversation(final Activity activity, final String firstInterlocutorId, final String secondInterlocutorId)
+    public LiveData<Resource<PrivateConversation, FetchDataError>> getPrivateConversation(final Activity activity,
+                                                                                          final String firstInterlocutorId,
+                                                                                          final String secondInterlocutorId)
     {
         final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource = new MutableLiveData<>();
         privateConversationDAO.getPrivateConversation(firstInterlocutorId, secondInterlocutorId)
@@ -58,75 +60,8 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                     else
                     {
                         DocumentSnapshot conversationDoc = snapshots.get(0);
-                        final String conversationId = conversationDoc.getString(PrivateConversationDAO.FIELD_ID);
-                        userDAO.getUser(firstInterlocutorId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                if(e == null)
-                                {
-                                    final User firstInterlocutor = documentSnapshot.toObject(User.class);
-                                    userDAO.getUser(secondInterlocutorId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                            if(e == null)
-                                            {
-                                                final User secondInterlocutor = documentSnapshot.toObject(User.class);
-                                                privateConversationDAO.getMessages(conversationId).addSnapshotListener(activity, new EventListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                                        if(e == null)
-                                                        {
-                                                            List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
-                                                            if(snapshots.isEmpty())
-                                                            {
-                                                                // No messages connected with private conversation.
-                                                                // This can occur while creating a private conversation.
-                                                                // When messages will be added we will hit the else clause.
-                                                                Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
-                                                                privateConversationResource.setValue(resource);
-                                                            }
-                                                            else
-                                                            {
-                                                                List<Message> messages = convertMessages(snapshots, firstInterlocutor, secondInterlocutor);
-                                                                PrivateConversation privateConversation =
-                                                                        new PrivateConversation(firstInterlocutor, secondInterlocutor, messages);
-                                                                Resource<PrivateConversation, FetchDataError> resource =
-                                                                        new Resource<>(Resource.Status.SUCCESS, privateConversation, null);
-                                                                privateConversationResource.setValue(resource);
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            Log.e(TAG, e.getMessage());
-                                                            FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
-                                                            Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
-                                                                    privateConversationResource.getValue().getData(), error);
-                                                            privateConversationResource.setValue(resource);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                            else
-                                            {
-                                                Log.e(TAG, e.getMessage());
-                                                FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
-                                                Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
-                                                        privateConversationResource.getValue().getData(), error);
-                                                privateConversationResource.setValue(resource);
-                                            }
-                                        }
-                                    });
-                                }
-                                else
-                                {
-                                    Log.e(TAG, e.getMessage());
-                                    FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
-                                    Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
-                                            privateConversationResource.getValue().getData(), error);
-                                    privateConversationResource.setValue(resource);
-                                }
-                            }
-                        });
+                        final String privateConversationId = conversationDoc.getString(PrivateConversationDAO.FIELD_ID);
+                        addUsersAndMessages(privateConversationResource, activity, privateConversationId, firstInterlocutorId, secondInterlocutorId);
                     }
                 }
                 else
@@ -142,6 +77,87 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
         return privateConversationResource;
     }
 
+    private void addUsersAndMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
+                                     final Activity activity, final String privateConversationId,
+                                     final String firstInterlocutorId, final String secondInterlocutorId)
+    {
+        userDAO.getUser(firstInterlocutorId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(e == null)
+                {
+                    final User firstInterlocutor = documentSnapshot.toObject(User.class);
+                    userDAO.getUser(secondInterlocutorId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                            if(e == null)
+                            {
+                                final User secondInterlocutor = documentSnapshot.toObject(User.class);
+                                addMessages(privateConversationResource, activity, privateConversationId, firstInterlocutor, secondInterlocutor);
+                            }
+                            else
+                            {
+                                Log.e(TAG, e.getMessage());
+                                FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
+                                Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
+                                        privateConversationResource.getValue().getData(), error);
+                                privateConversationResource.setValue(resource);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    Log.e(TAG, e.getMessage());
+                    FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
+                    Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
+                            privateConversationResource.getValue().getData(), error);
+                    privateConversationResource.setValue(resource);
+                }
+            }
+        });
+    }
+
+    private void addMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
+                             final Activity activity, final String privateConversationId,
+                             final User firstInterlocutor, final User secondInterlocutor)
+    {
+        privateConversationDAO.getMessages(privateConversationId).addSnapshotListener(activity, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(e == null)
+                {
+                    List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
+                    if(snapshots.isEmpty())
+                    {
+                        // No messages connected with private conversation.
+                        // This can occur while creating a private conversation.
+                        // When messages will be added we will hit the else clause.
+                        Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
+                        privateConversationResource.setValue(resource);
+                    }
+                    else
+                    {
+                        List<Message> messages = convertMessages(snapshots, firstInterlocutor, secondInterlocutor);
+                        PrivateConversation privateConversation =
+                                new PrivateConversation(firstInterlocutor, secondInterlocutor, messages);
+                        Resource<PrivateConversation, FetchDataError> resource =
+                                new Resource<>(Resource.Status.SUCCESS, privateConversation, null);
+                        privateConversationResource.setValue(resource);
+                    }
+                }
+                else
+                {
+                    Log.e(TAG, e.getMessage());
+                    FetchDataError error = new FetchDataError(FetchDataError.Type.UNKNOWN);
+                    Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.ERROR,
+                            privateConversationResource.getValue().getData(), error);
+                    privateConversationResource.setValue(resource);
+                }
+            }
+        });
+    }
+
     private List<Message> convertMessages(List<DocumentSnapshot> snapshots, User firstInterlocutor, User secondInterlocutor)
     {
         List<Message> messages = new ArrayList<>();
@@ -150,6 +166,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
             User interlocutor;
             Date postTime;
             String text;
+            String id = snapshot.getString(PrivateConversationDAO.MESSAGES_FIELD_ID);
             String interlocutorId = snapshot.getString(PrivateConversationDAO.MESSAGES_FIELD_INTERLOCUTOR_ID);
             if(interlocutorId.equals(firstInterlocutor.getUid()))
             {
@@ -161,7 +178,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
             }
             postTime = snapshot.getTimestamp(PrivateConversationDAO.MESSAGES_FIELD_POST_TIME).toDate();
             text = snapshot.getString(PrivateConversationDAO.MESSAGES_FIELD_TEXT);
-            messages.add(new Message(interlocutor, postTime, text));
+            messages.add(new Message(id, interlocutor, postTime, text));
         }
         return messages;
     }

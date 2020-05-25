@@ -5,7 +5,8 @@ import java.util.Objects;
 
 public class Message {
 
-    private User user;
+    private String id;
+    private User sender;
     private Date postTime;
     private String text;
 
@@ -14,21 +15,32 @@ public class Message {
 
     }
 
-    public Message(User user, Date postTime, String text)
+    public Message(String id, User sender, Date postTime, String text)
     {
-        this.user = user;
+        this.id = id;
+        this.sender = sender;
         this.postTime = postTime;
         this.text = text;
     }
 
-    public User getUser()
+    public String getId()
     {
-        return user;
+        return id;
     }
 
-    public void setUser(User user)
+    public void setId(String id)
     {
-        this.user = user;
+        this.id = id;
+    }
+
+    public User getSender()
+    {
+        return sender;
+    }
+
+    public void setSender(User sender)
+    {
+        this.sender = sender;
     }
 
     public Date getPostTime()
@@ -62,7 +74,8 @@ public class Message {
             return false;
         }
         Message message = (Message) o;
-        return Objects.equals(user, message.user) &&
+        return Objects.equals(id, message.id) &&
+                Objects.equals(sender, message.sender) &&
                 Objects.equals(postTime, message.postTime) &&
                 Objects.equals(text, message.text);
     }
@@ -70,7 +83,8 @@ public class Message {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 59 * hash + Objects.hashCode(user);
+        hash = 59 * hash + Objects.hashCode(id);
+        hash = 59 * hash + Objects.hashCode(sender);
         hash = 59 * hash + Objects.hashCode(postTime);
         hash = 59 * hash + Objects.hashCode(text);
         return hash;

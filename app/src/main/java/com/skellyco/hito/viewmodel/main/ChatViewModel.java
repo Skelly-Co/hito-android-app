@@ -18,7 +18,6 @@ public class ChatViewModel extends ViewModel {
     private String loggedInUid;
     private String interlocutorUid;
     private IUserService userService;
-    private LiveData<Resource<User, FetchDataError>> loggedInUser;
     private LiveData<Resource<User, FetchDataError>> interlocutorUser;
     private IPrivateConversationService privateConversationService;
     private LiveData<Resource<PrivateConversation, FetchDataError>> privateConversation;
@@ -35,18 +34,12 @@ public class ChatViewModel extends ViewModel {
         this.interlocutorUid = interlocutorUid;
     }
 
-    public void fetchUsers(Activity activity)
+    public void fetchInterlocutor(Activity activity)
     {
-        loggedInUser = userService.getUser(activity, loggedInUid);
         interlocutorUser = userService.getUser(activity, interlocutorUid);
     }
 
-    public LiveData<Resource<User, FetchDataError>> getLoggedInUser()
-    {
-        return loggedInUser;
-    }
-
-    public LiveData<Resource<User, FetchDataError>> getInterlocutorUser()
+    public LiveData<Resource<User, FetchDataError>> getInterlocutor()
     {
         return interlocutorUser;
     }

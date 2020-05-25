@@ -3,9 +3,10 @@ package com.skellyco.hito.view.main;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,11 +14,11 @@ import android.widget.TextView;
 
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
-import com.skellyco.hito.core.entity.Message;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
+import com.skellyco.hito.view.main.adapter.MessageAdapter;
 import com.skellyco.hito.viewmodel.main.ChatViewModel;
 
 public class ChatActivity extends AppCompatActivity {
@@ -29,9 +30,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private ImageButton btnBack;
     private TextView tvDisplayName;
+    private RecyclerView recMessages;
     private EditText etMessageInput;
 
     private ChatViewModel chatViewModel;
+    private MessageAdapter messageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +47,14 @@ public class ChatActivity extends AppCompatActivity {
         initializeViews();
         initializeViewModel(loggedInUid, interlocutorId);
         initializeListeners();
+        initializeRecyclerViewAndAdapter();
     }
 
     private void initializeViews()
     {
         btnBack = findViewById(R.id.btnBack);
         tvDisplayName = findViewById(R.id.tvDisplayName);
+        recMessages = findViewById(R.id.recMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
     }
 
@@ -69,11 +74,19 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    private void initializeRecyclerViewAndAdapter()
+    {
+        recMessages.setLayoutManager(new LinearLayoutManager(this));
+        recMessages.setHasFixedSize(true);
+        messageAdapter = new MessageAdapter();
+        recMessages.setAdapter(messageAdapter);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        chatViewModel.fetchUsers(this);
-        chatViewModel.getInterlocutorUser().observe(this, new Observer<Resource<User, FetchDataError>>() {
+        chatViewModel.fetchInterlocutor(this);
+        chatViewModel.getInterlocutor().observe(this, new Observer<Resource<User, FetchDataError>>() {
             @Override
             public void onChanged(Resource<User, FetchDataError> resource) {
                 if(resource.getStatus() == Resource.Status.SUCCESS)
@@ -100,7 +113,7 @@ public class ChatActivity extends AppCompatActivity {
                     //We are checking here if conversation between users exists
                     if(resource.getData() != null)
                     {
-                        //TO DO - initialize adapter and set recyclerview
+                        messageAdapter.submitList(resource.getData().getMessages());
                     }
                 }
             }

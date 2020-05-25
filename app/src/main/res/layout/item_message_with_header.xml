@@ -1,61 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/conMainContainer"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:background="?attr/colorBackgroundElement">
-
-<de.hdodenhof.circleimageview.CircleImageView
-    android:id="@+id/imgProfilePicture"
-    android:layout_width="44dp"
-    android:layout_height="44dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    android:src="@drawable/default_user_profile_picture"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginStart="12dp">
-</de.hdodenhof.circleimageview.CircleImageView>
-
-<TextView
-    android:id="@+id/tvInterlocutorUsername"
-    android:layout_width="wrap_content"
+    android:id="@+id/conMainContainer"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@id/imgProfilePicture"
-    app:layout_constraintLeft_toRightOf="@id/imgProfilePicture"
-    android:layout_marginStart="8dp"
-    android:textColor="?attr/colorPrimary"
-    android:textSize="16sp"
-    android:text="@string/placeholder_username">
-</TextView>
+    android:layout_marginTop="18dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/colorBackgroundElement">
 
-<TextView
-    android:id="@+id/tvPostTime"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="@id/tvInterlocutorUsername"
-    android:paddingBottom="1dp"
-    app:layout_constraintLeft_toRightOf="@id/tvInterlocutorUsername"
-    android:layout_marginStart="8dp"
-    android:textColor="?attr/colorTextContrast"
-    android:textSize="12sp"
-    android:text="@string/placeholder_date">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgProfilePicture"
+       android:layout_width="42dp"
+        android:layout_height="42dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:src="@drawable/default_user_profile_picture"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="12dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
 
-</TextView>
+    <TextView
+        android:id="@+id/tvSenderUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/imgProfilePicture"
+        app:layout_constraintLeft_toRightOf="@id/imgProfilePicture"
+        android:layout_marginStart="10dp"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="16sp"
+        android:text="@string/placeholder_username">
+    </TextView>
 
-<TextView
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@id/imgProfilePicture"
-    app:layout_constraintTop_toBottomOf="@id/tvInterlocutorUsername"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:layout_marginTop="4dp"
-    android:layout_marginStart="8dp"
-    android:textColor="?attr/colorText"
-    android:textSize="15sp"
-    android:text="@string/placeholder_message_text">
+    <TextView
+        android:id="@+id/tvPostTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/tvSenderUsername"
+        android:paddingBottom="1dp"
+        app:layout_constraintLeft_toRightOf="@id/tvSenderUsername"
+        android:layout_marginStart="8dp"
+        android:textColor="?attr/colorTextContrast"
+        android:textSize="12sp"
+        android:text="@string/placeholder_date">
 
-</TextView>
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/imgProfilePicture"
+        app:layout_constraintBottom_toBottomOf="@id/imgProfilePicture"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="10dp"
+        android:textColor="?attr/colorText"
+        android:textSize="15sp"
+        android:text="@string/placeholder_message_text">
+
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
