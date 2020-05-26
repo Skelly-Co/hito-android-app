@@ -93,9 +93,15 @@ public class ChatActivity extends AppCompatActivity {
     {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
-//        layoutManager.setReverseLayout(true);
         recMessages.setLayoutManager(layoutManager);
         recMessages.setHasFixedSize(true);
+        recMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                recMessages.scrollToPosition(messageAdapter.getItemCount()-1);
+            }
+        });
+
         messageAdapter = new MessageAdapter();
         messageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
