@@ -3,6 +3,7 @@ package com.skellyco.hito.view.entry;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -183,8 +184,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void displaySuccessInformation(ResetPasswordDTO resetPasswordDTO)
     {
         Toast toast = Toast.makeText(getApplicationContext(),
-                Html.fromHtml("We sent instructions to change your password to " + "<b>" + resetPasswordDTO.getEmail() + "</b>. " +
-                        "Please check both your inbox and spam folder."),
+                HtmlCompat.fromHtml("We sent instructions to change your password to " + "<b>" + resetPasswordDTO.getEmail() + "</b>. " +
+                        "Please check both your inbox and spam folder.", HtmlCompat.FROM_HTML_MODE_LEGACY),
                 Toast.LENGTH_LONG);
         toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 200);
         toast.show();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.skellyco.hito">
 
     <application
@@ -9,6 +10,12 @@
         android:roundIcon="@mipmap/ic_hito"
         android:supportsRtl="true"
         android:theme="@style/AppDarkTheme">
+        
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
+
         <activity android:name=".view.main.ChatActivity"
             android:theme="@style/AppDarkTheme.SlidrActivityTheme"/>
         <activity
