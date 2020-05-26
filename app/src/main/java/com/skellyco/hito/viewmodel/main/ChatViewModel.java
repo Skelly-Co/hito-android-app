@@ -9,6 +9,7 @@ import com.skellyco.hito.core.application.IPrivateConversationService;
 import com.skellyco.hito.core.application.IUserService;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
+import com.skellyco.hito.core.entity.dto.MessageDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.dependency.DependencyProvider;
@@ -34,6 +35,11 @@ public class ChatViewModel extends ViewModel {
         this.interlocutorUid = interlocutorUid;
     }
 
+    public String getLoggedInUid()
+    {
+        return loggedInUid;
+    }
+
     public void fetchInterlocutor(Activity activity)
     {
         interlocutorUser = userService.getUser(activity, interlocutorUid);
@@ -52,5 +58,10 @@ public class ChatViewModel extends ViewModel {
     public LiveData<Resource<PrivateConversation, FetchDataError>> getPrivateConversation()
     {
         return privateConversation;
+    }
+
+    public void sendMessage(MessageDTO messageDTO)
+    {
+
     }
 }

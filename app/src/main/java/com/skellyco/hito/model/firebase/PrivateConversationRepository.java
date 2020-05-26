@@ -15,6 +15,7 @@ import com.skellyco.hito.core.domain.IPrivateConversationRepository;
 import com.skellyco.hito.core.entity.Message;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
+import com.skellyco.hito.core.entity.dto.MessageDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.model.firebase.dao.PrivateConversationDAO;
@@ -35,6 +36,11 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
     {
         privateConversationDAO = new PrivateConversationDAO();
         userDAO = new UserDAO();
+    }
+
+    public void addMessage(final Activity activity, final PrivateConversation privateConversation, final MessageDTO messageDTO)
+    {
+
     }
 
     @Override
@@ -60,8 +66,8 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                     else
                     {
                         DocumentSnapshot conversationDoc = snapshots.get(0);
-                        final String privateConversationId = conversationDoc.getString(PrivateConversationDAO.FIELD_ID);
-                        addUsersAndMessages(privateConversationResource, activity, privateConversationId, firstInterlocutorId, secondInterlocutorId);
+                        final String privateConversationId = conversationDoc.getId();
+                        fetchUsersAndMessages(privateConversationResource, activity, privateConversationId, firstInterlocutorId, secondInterlocutorId);
                     }
                 }
                 else
@@ -77,9 +83,9 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
         return privateConversationResource;
     }
 
-    private void addUsersAndMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
-                                     final Activity activity, final String privateConversationId,
-                                     final String firstInterlocutorId, final String secondInterlocutorId)
+    private void fetchUsersAndMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
+                                       final Activity activity, final String privateConversationId,
+                                       final String firstInterlocutorId, final String secondInterlocutorId)
     {
         userDAO.getUser(firstInterlocutorId).addSnapshotListener(activity, new EventListener<DocumentSnapshot>() {
             @Override
@@ -93,7 +99,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                             if(e == null)
                             {
                                 final User secondInterlocutor = documentSnapshot.toObject(User.class);
-                                addMessages(privateConversationResource, activity, privateConversationId, firstInterlocutor, secondInterlocutor);
+                                fetchMessages(privateConversationResource, activity, privateConversationId, firstInterlocutor, secondInterlocutor);
                             }
                             else
                             {
@@ -118,9 +124,9 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
         });
     }
 
-    private void addMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
-                             final Activity activity, final String privateConversationId,
-                             final User firstInterlocutor, final User secondInterlocutor)
+    private void fetchMessages(final MutableLiveData<Resource<PrivateConversation, FetchDataError>> privateConversationResource,
+                               final Activity activity, final String privateConversationId,
+                               final User firstInterlocutor, final User secondInterlocutor)
     {
         privateConversationDAO.getMessages(privateConversationId).addSnapshotListener(activity, new EventListener<QuerySnapshot>() {
             @Override
@@ -140,7 +146,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                     {
                         List<Message> messages = convertMessages(snapshots, firstInterlocutor, secondInterlocutor);
                         PrivateConversation privateConversation =
-                                new PrivateConversation(firstInterlocutor, secondInterlocutor, messages);
+                                new PrivateConversation(privateConversationId, firstInterlocutor, secondInterlocutor, messages);
                         Resource<PrivateConversation, FetchDataError> resource =
                                 new Resource<>(Resource.Status.SUCCESS, privateConversation, null);
                         privateConversationResource.setValue(resource);
@@ -166,7 +172,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
             User interlocutor;
             Date postTime;
             String text;
-            String id = snapshot.getString(PrivateConversationDAO.MESSAGES_FIELD_ID);
+            String id = snapshot.getId();
             String interlocutorId = snapshot.getString(PrivateConversationDAO.MESSAGES_FIELD_INTERLOCUTOR_ID);
             if(interlocutorId.equals(firstInterlocutor.getUid()))
             {

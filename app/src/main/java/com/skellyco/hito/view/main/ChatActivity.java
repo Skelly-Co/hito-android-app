@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -14,12 +15,17 @@ import android.widget.TextView;
 
 import com.r0adkll.slidr.Slidr;
 import com.skellyco.hito.R;
+import com.skellyco.hito.core.entity.Message;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
+import com.skellyco.hito.core.entity.dto.MessageDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.view.main.adapter.MessageAdapter;
 import com.skellyco.hito.viewmodel.main.ChatViewModel;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -32,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView tvDisplayName;
     private RecyclerView recMessages;
     private EditText etMessageInput;
+    private ImageButton btnSendMessage;
 
     private ChatViewModel chatViewModel;
     private MessageAdapter messageAdapter;
@@ -56,6 +63,7 @@ public class ChatActivity extends AppCompatActivity {
         tvDisplayName = findViewById(R.id.tvDisplayName);
         recMessages = findViewById(R.id.recMessages);
         etMessageInput = findViewById(R.id.etMessageInput);
+        btnSendMessage = findViewById(R.id.btnSendMessage);
     }
 
     private void initializeViewModel(String loggedInUid, String interlocutorUid)
@@ -70,6 +78,12 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
             }
         });
     }
@@ -118,6 +132,16 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void sendMessage()
+    {
+//        String interlocutorId = chatViewModel.getLoggedInUid();
+//        String text = etMessageInput.getText().toString();
+//        Date postTime = Calendar.getInstance().getTime();
+//        chatViewModel.sendMessage(new MessageDTO(interlocutorId, postTime, text));
+        //clear input
+        //scroll down?
     }
 
     @Override
