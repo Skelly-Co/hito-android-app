@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class PrivateConversation {
 
+    private String id;
     private User firstInterlocutor;
     private User secondInterlocutor;
     private List<Message> messages;
@@ -14,31 +15,17 @@ public class PrivateConversation {
 
     }
 
-    public PrivateConversation(User firstInterlocutor, User secondInterlocutor, List<Message> messages)
+    public PrivateConversation(String id, User firstInterlocutor, User secondInterlocutor, List<Message> messages)
     {
+        this.id = id;
         this.firstInterlocutor = firstInterlocutor;
         this.secondInterlocutor = secondInterlocutor;
         this.messages = messages;
     }
 
-    public User getFirstInterlocutor()
+    public String getId()
     {
-        return firstInterlocutor;
-    }
-
-    public void setFirstInterlocutor(User firstInterlocutor)
-    {
-        this.firstInterlocutor = firstInterlocutor;
-    }
-
-    public User getSecondInterlocutor()
-    {
-        return secondInterlocutor;
-    }
-
-    public void setSecondInterlocutor(User secondInterlocutor)
-    {
-        this.secondInterlocutor = secondInterlocutor;
+        return id;
     }
 
     public List<Message> getMessages()
