@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.skellyco.hito.core.entity.dto.MessageDTO;
+import com.skellyco.hito.core.entity.dto.PrivateConversationDTO;
 
 public class PrivateConversationDAO {
 
@@ -32,6 +33,12 @@ public class PrivateConversationDAO {
                 .whereEqualTo(FIELD_SECOND_INTERLOCUTOR_ID, secondInterlocutorId);
     }
 
+    public Task<DocumentReference> createPrivateConversation(PrivateConversationDTO privateConversationDTO)
+    {
+        return firestore.collection(PRIVATE_CONVERSATIONS_COLLECTION)
+                .add(privateConversationDTO);
+    }
+
     public Task<DocumentReference> insertMessage(String privateConversationId, MessageDTO messageDTO)
     {
         return firestore.collection(PRIVATE_CONVERSATIONS_COLLECTION)
@@ -39,8 +46,6 @@ public class PrivateConversationDAO {
                 .collection(MESSAGES_SUBCOLLECTION)
                 .add(messageDTO);
     }
-
-
 
     public Query getMessages(String privateConversationId)
     {

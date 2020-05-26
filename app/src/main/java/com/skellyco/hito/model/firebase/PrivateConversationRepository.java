@@ -3,10 +3,15 @@ package com.skellyco.hito.model.firebase;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -16,8 +21,11 @@ import com.skellyco.hito.core.entity.Message;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.MessageDTO;
+import com.skellyco.hito.core.entity.dto.PrivateConversationDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
+import com.skellyco.hito.core.shared.error.InsertDataError;
+import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.model.firebase.dao.PrivateConversationDAO;
 import com.skellyco.hito.model.firebase.dao.UserDAO;
 
@@ -38,9 +46,70 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
         userDAO = new UserDAO();
     }
 
-    public void addMessage(final Activity activity, final PrivateConversation privateConversation, final MessageDTO messageDTO)
+    @Override
+    public LiveData<Resource<Void, InsertDataError>> createPrivateConversation(final PrivateConversationDTO privateConversationDTO,
+                                                                               final MessageDTO messageDTO)
     {
+        final MutableLiveData<Resource<Void, InsertDataError>> createPrivateConversationResource = new MutableLiveData<>();
+        privateConversationDAO.createPrivateConversation(privateConversationDTO)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful())
+                {
+                    String privateConversationId = task.getResult().getId();
+                    LiveDataUtil.observeOnce(insertMessage(privateConversationId, messageDTO), new Observer<Resource<Void, InsertDataError>>() {
+                        @Override
+                        public void onChanged(Resource<Void, InsertDataError> insertMessageResource) {
+                            if(insertMessageResource.getStatus() == Resource.Status.SUCCESS)
+                            {
+                                Resource<Void, InsertDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
+                                createPrivateConversationResource.setValue(resource);
+                            }
+                            else
+                            {
+                                InsertDataError error = insertMessageResource.getError();
+                                Resource<Void, InsertDataError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                                createPrivateConversationResource.setValue(resource);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    Log.e(TAG, task.getException().getMessage());
+                    InsertDataError error = new InsertDataError(InsertDataError.Type.UNKNOWN);
+                    Resource<Void, InsertDataError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                    createPrivateConversationResource.setValue(resource);
+                }
+            }
+        });
+        return createPrivateConversationResource;
+    }
 
+    @Override
+    public LiveData<Resource<Void, InsertDataError>> insertMessage(final String privateConversationId, final MessageDTO messageDTO)
+    {
+        final MutableLiveData<Resource<Void, InsertDataError>> insertMessageResource = new MutableLiveData<>();
+        privateConversationDAO.insertMessage(privateConversationId, messageDTO)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if(task.isSuccessful())
+                {
+                    Resource<Void, InsertDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
+                    insertMessageResource.setValue(resource);
+                }
+                else
+                {
+                    Log.e(TAG, task.getException().getMessage());
+                    InsertDataError error = new InsertDataError(InsertDataError.Type.UNKNOWN);
+                    Resource<Void, InsertDataError> resource = new Resource<>(Resource.Status.ERROR, null, error);
+                    insertMessageResource.setValue(resource);
+                }
+            }
+        });
+        return insertMessageResource;
     }
 
     @Override
@@ -60,14 +129,16 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                     {
                         //Private conversation not found - there is no conversation between users
                         //If conversation will be created in the future this method will be invoked and we will hit else clause
-                        Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
+                        Resource<PrivateConversation, FetchDataError> resource =
+                                new Resource<>(Resource.Status.SUCCESS, null, null);
                         privateConversationResource.setValue(resource);
                     }
                     else
                     {
                         DocumentSnapshot conversationDoc = snapshots.get(0);
                         final String privateConversationId = conversationDoc.getId();
-                        fetchUsersAndMessages(privateConversationResource, activity, privateConversationId, firstInterlocutorId, secondInterlocutorId);
+                        fetchUsersAndMessages(privateConversationResource, activity,
+                                privateConversationId, firstInterlocutorId, secondInterlocutorId);
                     }
                 }
                 else
@@ -99,7 +170,8 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                             if(e == null)
                             {
                                 final User secondInterlocutor = documentSnapshot.toObject(User.class);
-                                fetchMessages(privateConversationResource, activity, privateConversationId, firstInterlocutor, secondInterlocutor);
+                                fetchMessages(privateConversationResource, activity,
+                                        privateConversationId, firstInterlocutor, secondInterlocutor);
                             }
                             else
                             {
@@ -139,7 +211,8 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                         // No messages connected with private conversation.
                         // This can occur while creating a private conversation.
                         // When messages will be added we will hit the else clause.
-                        Resource<PrivateConversation, FetchDataError> resource = new Resource<>(Resource.Status.SUCCESS, null, null);
+                        Resource<PrivateConversation, FetchDataError> resource =
+                                new Resource<>(Resource.Status.SUCCESS, null, null);
                         privateConversationResource.setValue(resource);
                     }
                     else

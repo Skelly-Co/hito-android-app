@@ -3,6 +3,7 @@ package com.skellyco.hito.viewmodel.main;
 import android.app.Activity;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.skellyco.hito.core.application.IPrivateConversationService;
@@ -10,8 +11,10 @@ import com.skellyco.hito.core.application.IUserService;
 import com.skellyco.hito.core.entity.PrivateConversation;
 import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.MessageDTO;
+import com.skellyco.hito.core.entity.dto.PrivateConversationDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
+import com.skellyco.hito.core.shared.error.InsertDataError;
 import com.skellyco.hito.dependency.DependencyProvider;
 
 public class ChatViewModel extends ViewModel {
@@ -60,8 +63,17 @@ public class ChatViewModel extends ViewModel {
         return privateConversation;
     }
 
-    public void sendMessage(MessageDTO messageDTO)
+    public LiveData<Resource<Void, InsertDataError>> sendMessage(MessageDTO messageDTO)
     {
-
+        if(privateConversation.getValue().getData() == null)
+        {
+            PrivateConversationDTO privateConversationDTO = new PrivateConversationDTO(loggedInUid, interlocutorUid);
+            return privateConversationService.createPrivateConversation(privateConversationDTO, messageDTO);
+        }
+        else
+        {
+            String privateConversationId = privateConversation.getValue().getData().getId();
+            return privateConversationService.insertMessage(privateConversationId, messageDTO);
+        }
     }
 }

@@ -55,6 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         initializeViewModel(loggedInUid, interlocutorId);
         initializeListeners();
         initializeRecyclerViewAndAdapter();
+        initializeMessageInput();
     }
 
     private void initializeViews()
@@ -96,6 +97,11 @@ public class ChatActivity extends AppCompatActivity {
         recMessages.setAdapter(messageAdapter);
     }
 
+    private void initializeMessageInput()
+    {
+        etMessageInput.setEnabled(false);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -124,6 +130,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onChanged(Resource<PrivateConversation, FetchDataError> resource) {
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
+                    etMessageInput.setEnabled(true);
                     //We are checking here if conversation between users exists
                     if(resource.getData() != null)
                     {
@@ -136,12 +143,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendMessage()
     {
-//        String interlocutorId = chatViewModel.getLoggedInUid();
-//        String text = etMessageInput.getText().toString();
-//        Date postTime = Calendar.getInstance().getTime();
-//        chatViewModel.sendMessage(new MessageDTO(interlocutorId, postTime, text));
-        //clear input
-        //scroll down?
+        String interlocutorId = chatViewModel.getLoggedInUid();
+        String text = etMessageInput.getText().toString();
+        Date postTime = Calendar.getInstance().getTime();
+        MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text)
+        chatViewModel.sendMessage(messageDTO);
     }
 
     @Override
