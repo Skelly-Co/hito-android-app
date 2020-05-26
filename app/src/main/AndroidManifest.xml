@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_hito"
         android:supportsRtl="true"
         android:theme="@style/AppDarkTheme">
-        
+
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             tools:replace="android:launchMode"

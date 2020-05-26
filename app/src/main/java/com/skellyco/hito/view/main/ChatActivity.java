@@ -91,9 +91,18 @@ public class ChatActivity extends AppCompatActivity {
 
     private void initializeRecyclerViewAndAdapter()
     {
-        recMessages.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+//        layoutManager.setReverseLayout(true);
+        recMessages.setLayoutManager(layoutManager);
         recMessages.setHasFixedSize(true);
         messageAdapter = new MessageAdapter();
+        messageAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                recMessages.scrollToPosition(messageAdapter.getItemCount()-1);
+            }
+        });
         recMessages.setAdapter(messageAdapter);
     }
 
@@ -146,7 +155,7 @@ public class ChatActivity extends AppCompatActivity {
         String interlocutorId = chatViewModel.getLoggedInUid();
         String text = etMessageInput.getText().toString();
         Date postTime = Calendar.getInstance().getTime();
-        MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text)
+        MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text);
         chatViewModel.sendMessage(messageDTO);
     }
 

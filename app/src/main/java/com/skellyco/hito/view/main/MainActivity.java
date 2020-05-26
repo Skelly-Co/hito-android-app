@@ -196,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
     private void initializeRecyclerViewAndAdapters()
     {
         recChatList.setLayoutManager(new LinearLayoutManager(this));
-        recChatList.setHasFixedSize(true);
         localUsersAdapter = new UserAdapter();
         localUsersAdapter.setOnItemClickListener(new UserAdapter.OnItemClickListener() {
             @Override
