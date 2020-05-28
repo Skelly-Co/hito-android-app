@@ -32,6 +32,9 @@ import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.ui.view.util.ViewHelper;
 import com.skellyco.hito.ui.viewmodel.entry.ForgotPasswordViewModel;
 
+/**
+ * Role of this activity is to allow the user to reset the password to his account.
+ */
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     public static final String TAG = "ForgotPasswordActivity";
@@ -57,6 +60,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         initializeViewModel();
     }
 
+    /**
+     * Initializes the views - assigns layout's elements to the instance variables.
+     */
     private void initializeViews()
     {
         scrMainContainer = findViewById(R.id.scrMainContainer);
@@ -67,6 +73,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         relLoadingPanel = findViewById(R.id.relLoadingPanel);
     }
 
+    /**
+     * Initializes the listeners - specifies the actions that should happen during the interaction between
+     * the user and the activity.
+     */
     private void initializeListeners()
     {
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -86,11 +96,21 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *  Initializes the ViewModel.
+     */
     private void initializeViewModel()
     {
         forgotPasswordViewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
     }
 
+    /**
+     * Uses the ForgotPasswordViewModel to reset the users password.
+     * If resetting password was successful it invokes the displaySuccessInformation method and closes the activity.
+     * If resetting password was unsuccessful it invokes the displayError method.
+     *
+     * @param resetPasswordDTO reset password form.
+     */
     private void resetPassword(final ResetPasswordDTO resetPasswordDTO)
     {
         clearErrors();
@@ -107,7 +127,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            goBackToLoginActivity(resetPasswordDTO);
+                            closeActivity(resetPasswordDTO);
                         }
                     }, 500);
                 }
@@ -119,18 +139,31 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Shows the loading spinner.
+     */
     private void showLoading()
     {
         relLoadingPanel.setVisibility(View.VISIBLE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, false);
     }
 
+    /**
+     * Hides the loading spinner.
+     */
     private void hideLoading()
     {
         relLoadingPanel.setVisibility(View.GONE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, true);
     }
 
+    /**
+     * Checks the type of the error and depending on the error type defines the error message to
+     * be displayed and invokes the proper method for displaying an error: displayEmailError or
+     * displayGenericError.
+     *
+     * @param error error to display.
+     */
     private void displayError(ResetPasswordError error)
     {
         switch(error.getType())
@@ -164,6 +197,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the email error, right below the email edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayEmailError(String errorMessage)
     {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) btnConfirm.getLayoutParams();
@@ -174,12 +212,24 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         tvEmailError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Uses AlertBuilder class to create an error dialog and shows it with
+     * the given error message.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayGenericError(String errorMessage)
     {
         AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
         errorDialog.show();
     }
 
+    /**
+     * Displays the toast to inform the user that instructions on how to reset the password were sent
+     * to his email address.
+     *
+     * @param resetPasswordDTO reset password form.
+     */
     private void displaySuccessInformation(ResetPasswordDTO resetPasswordDTO)
     {
         Toast toast = Toast.makeText(getApplicationContext(),
@@ -190,14 +240,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void goBackToLoginActivity(ResetPasswordDTO resetPasswordDTO)
-    {
-        Intent userDataIntent = new Intent();
-        userDataIntent.putExtra(EXTRA_EMAIL, resetPasswordDTO.getEmail());
-        setResult(Activity.RESULT_OK, userDataIntent);
-        finish();
-    }
-
+    /**
+     * Clears the all of the error messages and aligns the views properly.
+     * Note - When error messages are being displayed the margins has to be different
+     * than when they are hidden for the better visual experience.
+     */
     private void clearErrors()
     {
         ConstraintLayout.LayoutParams createAccountParams = (ConstraintLayout.LayoutParams) btnConfirm.getLayoutParams();
@@ -209,6 +256,22 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         tvEmailError.setVisibility(View.GONE);
     }
 
+    /**
+     * Finishes the activity and puts the data of reset password from in the intent.
+     *
+     * @param resetPasswordDTO reset password form.
+     */
+    private void closeActivity(ResetPasswordDTO resetPasswordDTO)
+    {
+        Intent userDataIntent = new Intent();
+        userDataIntent.putExtra(EXTRA_EMAIL, resetPasswordDTO.getEmail());
+        setResult(Activity.RESULT_OK, userDataIntent);
+        finish();
+    }
+
+    /**
+     * Overrides the finish method to add the sliding animation on finish.
+     */
     @Override
     public void finish() {
         super.finish();

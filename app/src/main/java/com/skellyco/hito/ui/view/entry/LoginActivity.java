@@ -30,6 +30,10 @@ import com.skellyco.hito.ui.view.util.LoginDataManager;
 import com.skellyco.hito.ui.view.util.ViewHelper;
 import com.skellyco.hito.ui.viewmodel.entry.LoginViewModel;
 
+/**
+ * Role of this activity is to allow the user to log in and redirect him to the MainActivity.
+ * It also allows the user to navigate to CreateAccountActivity and ForgotPasswordActivity.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     public static final String TAG = "LoginActivity";
@@ -124,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Uses LoginViewModel to perform the logging in using the passed credentials.
+     * Uses the LoginViewModel to perform the logging in using the passed credentials.
      * If logging in is successful it saves the login credentials using LoginDataManager
      * and starts the MainActivity. If logging in did not succeeded, it uses displayError
      * method to display the error.
@@ -176,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Checks the type of the error and depending on the error type defines the error message to
      * be displayed and invokes the proper method for displaying an error: displayEmailError,
-     * displayUsernameError or displayGenericError.
+     * displayPasswordError or displayGenericError.
      *
      * @param error error to display.
      */

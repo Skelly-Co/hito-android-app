@@ -28,6 +28,9 @@ import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.ui.view.util.ViewHelper;
 import com.skellyco.hito.ui.viewmodel.entry.CreateAccountViewModel;
 
+/**
+ * Role of this activity is to allow the user to create an account.
+ */
 public class CreateAccountActivity extends AppCompatActivity {
 
     public static final String TAG = "CreateAccountActivity";
@@ -59,6 +62,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         initializeViewModel();
     }
 
+    /**
+     * Initializes the views - assigns layout's elements to the instance variables.
+     */
     private void initializeViews()
     {
         scrMainContainer = findViewById(R.id.scrMainContainer);
@@ -73,6 +79,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         relLoadingPanel = findViewById(R.id.relLoadingPanel);
     }
 
+    /**
+     * Initializes the listeners - specifies the actions that should happen during the interaction between
+     * the user and the activity.
+     */
     private void initializeListeners()
     {
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -94,11 +104,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *  Initializes the ViewModel.
+     */
     private void initializeViewModel()
     {
         createAccountViewModel = new ViewModelProvider(this).get(CreateAccountViewModel.class);
     }
 
+    /**
+     * Uses the CreateAccountViewModel to create an account.
+     * If creating an account was successful it closes the activity.
+     * If creating an account was unsuccessful it invokes the displayError method.
+     *
+     * @param createAccountDTO create account form.
+     */
     private void createAccount(final CreateAccountDTO createAccountDTO)
     {
         clearErrors();
@@ -110,7 +130,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 hideLoading();
                 if(resource.getStatus() == Resource.Status.SUCCESS)
                 {
-                    goBackToLoginActivity(createAccountDTO);
+                    closeActivity(createAccountDTO);
                 }
                 else
                 {
@@ -120,18 +140,31 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Shows the loading spinner.
+     */
     private void showLoading()
     {
         relLoadingPanel.setVisibility(View.VISIBLE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, false);
     }
 
+    /**
+     * Hides the loading spinner.
+     */
     private void hideLoading()
     {
         relLoadingPanel.setVisibility(View.GONE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, true);
     }
 
+    /**
+     * Checks the type of the error and depending on the error type defines the error message to
+     * be displayed and invokes the proper method for displaying an error: displayEmailError,
+     * displayUsernameError, displayPasswordError or displayGenericError.
+     *
+     * @param error error to display.
+     */
     private void displayError(CreateAccountError error)
     {
         switch(error.getType())
@@ -185,6 +218,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the email error, right below the email edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayEmailError(String errorMessage)
     {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) etUsername.getLayoutParams();
@@ -195,6 +233,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         tvEmailError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Displays the username error, right below the username edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayUsernameError(String errorMessage)
     {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) etPassword.getLayoutParams();
@@ -205,6 +248,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         tvUsernameError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Displays the password error, right below the password edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayPasswordError(String errorMessage)
     {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) btnCreateAccount.getLayoutParams();
@@ -215,12 +263,23 @@ public class CreateAccountActivity extends AppCompatActivity {
         tvPasswordError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Uses AlertBuilder class to create an error dialog and shows it with
+     * the given error message.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayGenericError(String errorMessage)
     {
         AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
         errorDialog.show();
     }
 
+    /**
+     * Clears the all of the error messages and aligns the views properly.
+     * Note - When error messages are being displayed the margins has to be different
+     * than when they are hidden for the better visual experience.
+     */
     private void clearErrors()
     {
         ConstraintLayout.LayoutParams usernameParams = (ConstraintLayout.LayoutParams) etUsername.getLayoutParams();
@@ -247,7 +306,12 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
-    private void goBackToLoginActivity(CreateAccountDTO createAccountDTO)
+    /**
+     * Finishes the activity and puts the data of the created user in the intent.
+     *
+     * @param createAccountDTO create account form.
+     */
+    private void closeActivity(CreateAccountDTO createAccountDTO)
     {
         Intent userDataIntent = new Intent();
         userDataIntent.putExtra(EXTRA_EMAIL, createAccountDTO.getEmail());
@@ -256,6 +320,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Overrides the finish method to add the sliding animation on finish.
+     */
     @Override
     public void finish() {
         super.finish();
