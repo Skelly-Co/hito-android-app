@@ -109,6 +109,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
      * If resetting password was successful it invokes the displaySuccessInformation method and closes the activity.
      * If resetting password was unsuccessful it invokes the displayError method.
      *
+     * Since resetting the password is a one-time call we are using LiveDataUtil observeOnce method
+     * to automatically stop the observation after first invocation of the onChanged method.
+     *
      * @param resetPasswordDTO reset password form.
      */
     private void resetPassword(final ResetPasswordDTO resetPasswordDTO)

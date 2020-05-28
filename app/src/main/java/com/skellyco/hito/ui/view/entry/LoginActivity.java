@@ -133,6 +133,9 @@ public class LoginActivity extends AppCompatActivity {
      * and starts the MainActivity. If logging in did not succeeded, it uses displayError
      * method to display the error.
      *
+     * Since logging in is a one-time call we are using LiveDataUtil observeOnce method
+     * to automatically stop the observation after first invocation of the onChanged method.
+     *
      * @param loginDTO login credentials.
      */
     private void login(final LoginDTO loginDTO)

@@ -117,6 +117,9 @@ public class CreateAccountActivity extends AppCompatActivity {
      * If creating an account was successful it closes the activity.
      * If creating an account was unsuccessful it invokes the displayError method.
      *
+     * Since creating an account is a one-time call we are using LiveDataUtil observeOnce method
+     * to automatically stop the observation after first invocation of the onChanged method.
+     *
      * @param createAccountDTO create account form.
      */
     private void createAccount(final CreateAccountDTO createAccountDTO)

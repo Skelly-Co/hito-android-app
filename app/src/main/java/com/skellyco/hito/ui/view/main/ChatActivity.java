@@ -60,6 +60,9 @@ public class ChatActivity extends AppCompatActivity {
         initializeMessageInput();
     }
 
+    /**
+     * Initializes the views - assigns layout's elements to the instance variables.
+     */
     private void initializeViews()
     {
         btnBack = findViewById(R.id.btnBack);
@@ -69,12 +72,19 @@ public class ChatActivity extends AppCompatActivity {
         btnSendMessage = findViewById(R.id.btnSendMessage);
     }
 
+    /**
+     *  Initializes the ViewModel.
+     */
     private void initializeViewModel(String loggedInUid, String interlocutorUid)
     {
         chatViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         chatViewModel.setUsers(loggedInUid, interlocutorUid);
     }
 
+    /**
+     * Initializes the listeners - specifies the actions that should happen during the interaction between
+     * the user and the activity.
+     */
     private void initializeListeners()
     {
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +124,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the RecyclerView with messages and the adapter for it.
+     * Sets the listeners on RecyclerView and MessageAdapter to keep the scroll
+     * of the RecyclerView on the bottom when new Message appears or when the soft keyboard
+     * appears.
+     */
     private void initializeRecyclerViewAndAdapter()
     {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -135,12 +151,30 @@ public class ChatActivity extends AppCompatActivity {
         recMessages.setAdapter(messageAdapter);
     }
 
+    /**
+     * Initializes the message input and send message button by disabling them.
+     * During the creation of the activity, the PrivateConversation is still not
+     * loaded so sending a message should be disabled.
+     */
     private void initializeMessageInput()
     {
         etMessageInput.setEnabled(false);
         btnSendMessage.setEnabled(false);
     }
 
+    /**
+     * Invokes fetchInterlocutor method on the ChatViewModel to fetch the data into the model
+     * and afterwards invokes getInterlocutor method to observe on the interlocutor and display
+     * the interlocutor's data in the topbar.
+     *
+     * Also after interlocutor is successfully fetched it
+     * invokes loadPrivateConversationAndMessages method to fetch the conversation between the logged in
+     * user and the interlocutor.
+     *
+     * It is important to notice that we are passing the Activity into the observe method which makes our
+     * observer lifecycle-aware. It means that we do not have to override the onStop method and stop observing on the LiveData
+     * there, since it will be done automatically.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -152,7 +186,7 @@ public class ChatActivity extends AppCompatActivity {
                 {
                     tvDisplayName.setText(resource.getData().getUsername());
                     etMessageInput.setHint(MESSAGE_PROMPT + resource.getData().getUsername());
-                    initializeMessages();
+                    loadPrivateConversationAndMessages();
                 }
                 // For right now I have not discovered any possible errors that can happen during fetching the data.
                 // If some error will occur, it will be logged in domain layer so it won't pass unnoticed.
@@ -161,7 +195,7 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeMessages()
+    private void loadPrivateConversationAndMessages()
     {
         chatViewModel.fetchPrivateConversation(this);
         chatViewModel.getPrivateConversation().observe(this, new Observer<Resource<PrivateConversation, FetchDataError>>() {
