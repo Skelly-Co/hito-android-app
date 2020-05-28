@@ -222,7 +222,7 @@ public class ChatActivity extends AppCompatActivity {
         MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text);
 
         btnSendMessage.setEnabled(false);
-        LiveDataUtil.observeOnce(chatViewModel.sendMessage(messageDTO), new Observer<Resource<Void, InsertDataError>>() {
+        LiveDataUtil.observeOnce(chatViewModel.sendMessage(this, messageDTO), new Observer<Resource<Void, InsertDataError>>() {
             @Override
             public void onChanged(Resource<Void, InsertDataError> resource) {
                 btnSendMessage.setEnabled(true);

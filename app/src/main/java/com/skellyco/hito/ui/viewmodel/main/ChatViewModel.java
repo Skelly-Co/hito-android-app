@@ -62,17 +62,17 @@ public class ChatViewModel extends ViewModel {
         return privateConversation;
     }
 
-    public LiveData<Resource<Void, InsertDataError>> sendMessage(MessageDTO messageDTO)
+    public LiveData<Resource<Void, InsertDataError>> sendMessage(Activity activity, MessageDTO messageDTO)
     {
         if(privateConversation.getValue().getData() == null)
         {
             PrivateConversationDTO privateConversationDTO = new PrivateConversationDTO(loggedInUid, interlocutorUid);
-            return privateConversationService.createPrivateConversation(privateConversationDTO, messageDTO);
+            return privateConversationService.createPrivateConversation(activity, privateConversationDTO, messageDTO);
         }
         else
         {
             String privateConversationId = privateConversation.getValue().getData().getId();
-            return privateConversationService.insertMessage(privateConversationId, messageDTO);
+            return privateConversationService.insertMessage(activity, privateConversationId, messageDTO);
         }
     }
 }

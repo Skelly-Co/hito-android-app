@@ -23,15 +23,15 @@ public class PrivateConversationService implements IPrivateConversationService {
     }
 
     @Override
-    public LiveData<Resource<Void, InsertDataError>> createPrivateConversation(PrivateConversationDTO privateConversationDTO, MessageDTO messageDTO)
+    public LiveData<Resource<Void, InsertDataError>> createPrivateConversation(Activity activity, PrivateConversationDTO privateConversationDTO, MessageDTO messageDTO)
     {
-        return privateConversationRepository.createPrivateConversation(privateConversationDTO, messageDTO);
+        return privateConversationRepository.createPrivateConversation(activity, privateConversationDTO, messageDTO);
     }
 
     @Override
-    public LiveData<Resource<Void, InsertDataError>> insertMessage(String privateConversationId, MessageDTO messageDTO)
+    public LiveData<Resource<Void, InsertDataError>> insertMessage(Activity activity, String privateConversationId, MessageDTO messageDTO)
     {
-        return privateConversationRepository.insertMessage(privateConversationId, messageDTO);
+        return privateConversationRepository.insertMessage(activity, privateConversationId, messageDTO);
     }
 
     @Override

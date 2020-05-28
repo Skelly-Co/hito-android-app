@@ -13,9 +13,9 @@ import com.skellyco.hito.core.shared.error.InsertDataError;
 
 public interface IPrivateConversationRepository {
 
-    LiveData<Resource<Void, InsertDataError>> createPrivateConversation(PrivateConversationDTO privateConversationDTO, MessageDTO messageDTO);
+    LiveData<Resource<Void, InsertDataError>> createPrivateConversation(Activity activity, PrivateConversationDTO privateConversationDTO, MessageDTO messageDTO);
 
-    LiveData<Resource<Void, InsertDataError>> insertMessage(String privateConversationId, MessageDTO messageDTO);
+    LiveData<Resource<Void, InsertDataError>> insertMessage(Activity activity, String privateConversationId, MessageDTO messageDTO);
 
     LiveData<Resource<PrivateConversation, FetchDataError>> getPrivateConversation(final Activity activity, final String firstInterlocutorId, final String secondInterlocutorId);
 }

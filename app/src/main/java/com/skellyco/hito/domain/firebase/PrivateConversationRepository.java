@@ -47,7 +47,8 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
     }
 
     @Override
-    public LiveData<Resource<Void, InsertDataError>> createPrivateConversation(final PrivateConversationDTO privateConversationDTO,
+    public LiveData<Resource<Void, InsertDataError>> createPrivateConversation(final Activity activity,
+                                                                               final PrivateConversationDTO privateConversationDTO,
                                                                                final MessageDTO messageDTO)
     {
         final MutableLiveData<Resource<Void, InsertDataError>> createPrivateConversationResource = new MutableLiveData<>();
@@ -58,7 +59,7 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                 if(task.isSuccessful())
                 {
                     String privateConversationId = task.getResult().getId();
-                    LiveDataUtil.observeOnce(insertMessage(privateConversationId, messageDTO), new Observer<Resource<Void, InsertDataError>>() {
+                    LiveDataUtil.observeOnce(insertMessage(activity, privateConversationId, messageDTO), new Observer<Resource<Void, InsertDataError>>() {
                         @Override
                         public void onChanged(Resource<Void, InsertDataError> insertMessageResource) {
                             if(insertMessageResource.getStatus() == Resource.Status.SUCCESS)
@@ -88,11 +89,11 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
     }
 
     @Override
-    public LiveData<Resource<Void, InsertDataError>> insertMessage(final String privateConversationId, final MessageDTO messageDTO)
+    public LiveData<Resource<Void, InsertDataError>> insertMessage(Activity activity, final String privateConversationId, final MessageDTO messageDTO)
     {
         final MutableLiveData<Resource<Void, InsertDataError>> insertMessageResource = new MutableLiveData<>();
         privateConversationDAO.insertMessage(privateConversationId, messageDTO)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                .addOnCompleteListener(activity, new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if(task.isSuccessful())
