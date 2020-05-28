@@ -60,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         initializeLoginDataManager();
     }
 
+    /**
+     * Initializes the views - assigns layout's elements to the instance variables.
+     */
     private void initializeViews()
     {
         scrMainContainer = findViewById(R.id.scrMainContainer);
@@ -73,6 +76,10 @@ public class LoginActivity extends AppCompatActivity {
         relLoadingPanel = findViewById(R.id.relLoadingPanel);
     }
 
+    /**
+     * Initializes the listeners - specifies the actions that should happen during the interaction between
+     * the user and the activity.
+     */
     private void initializeListeners()
     {
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -100,16 +107,30 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *  Initializes the ViewModel.
+     */
     private void initializeViewModel()
     {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
+    /**
+     * Initializes the LoginDataManager.
+     */
     private void initializeLoginDataManager()
     {
         loginDataManager = new LoginDataManager(this);
     }
 
+    /**
+     * Uses LoginViewModel to perform the logging in using the passed credentials.
+     * If logging in is successful it saves the login credentials using LoginDataManager
+     * and starts the MainActivity. If logging in did not succeeded, it uses displayError
+     * method to display the error.
+     *
+     * @param loginDTO login credentials.
+     */
     private void login(final LoginDTO loginDTO)
     {
         clearErrors();
@@ -134,18 +155,31 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Shows the loading spinner.
+     */
     private void showLoading()
     {
         relLoadingPanel.setVisibility(View.VISIBLE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, false);
     }
 
+    /**
+     * Hides the loading spinner.
+     */
     private void hideLoading()
     {
         relLoadingPanel.setVisibility(View.GONE);
         ViewHelper.setViewGroupEnabled(scrMainContainer, true);
     }
 
+    /**
+     * Checks the type of the error and depending on the error type defines the error message to
+     * be displayed and invokes the proper method for displaying an error: displayEmailError,
+     * displayUsernameError or displayGenericError.
+     *
+     * @param error error to display.
+     */
     private void displayError(LoginError error)
     {
         switch(error.getType())
@@ -194,6 +228,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays the email error, right below the email edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayEmailError(String errorMessage)
     {
         LayoutParams params = (LayoutParams) etPassword.getLayoutParams();
@@ -204,6 +243,11 @@ public class LoginActivity extends AppCompatActivity {
         tvEmailError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Displays the password error, right below the password edit text.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayPasswordError(String errorMessage)
     {
         LayoutParams params = (LayoutParams) btnLogin.getLayoutParams();
@@ -214,12 +258,23 @@ public class LoginActivity extends AppCompatActivity {
         tvPasswordError.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Uses AlertBuilder class to create an error dialog and shows it with
+     * the given error message.
+     *
+     * @param errorMessage error message to display.
+     */
     private void displayGenericError(String errorMessage)
     {
-        AlertDialog errorDialog = AlertBuilder.buildInformationDialog(this, errorMessage);
+        AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
         errorDialog.show();
     }
 
+    /**
+     * Clears the all of the error messages and aligns the views properly.
+     * Note - When error messages are being displayed the margins has to be different
+     * than when they are hidden for the better visual experience.
+     */
     private void clearErrors()
     {
         LayoutParams passwordParams = (LayoutParams) etPassword.getLayoutParams();
@@ -239,6 +294,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Starts the CreateAccountActivity.
+     */
     private void startCreateAccountActivity()
     {
         Intent intent = new Intent(this, CreateAccountActivity.class);
@@ -246,6 +304,9 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
+    /**
+     * Starts the ForgotPasswordActivity.
+     */
     private void startForgotPasswordActivity()
     {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
@@ -253,6 +314,11 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
+    /**
+     * Starts the MainActivity.
+     *
+     * @param uid logged in user id.
+     */
     private void startMainActivity(String uid)
     {
         Intent intent = new Intent(this, MainActivity.class);
@@ -261,6 +327,21 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
+    /**
+     * Gets the activity result either from the CreateAccountActivity or ForgotPasswordActivity.
+     *
+     * If result comes from the CreateAccountActivity and the result code status is positive, it means
+     * that account was successfully created, so it fills the username and password edit texts (for better user experience)
+     * and invokes the login method passing the given login data.
+     *
+     * If result comes from the ForgotPassword activity and the result code status is positive, it means
+     * that user successfully sent the reset password form, so it fills the email edit text and prepares
+     * the user for logging in after he successfully resets his password.
+     *
+     * @param requestCode specifies the activity that sent the result.
+     * @param resultCode specifies the result's status.
+     * @param data data passed as a result.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -273,7 +354,7 @@ public class LoginActivity extends AppCompatActivity {
                 etEmail.setText(email);
                 etPassword.setText(password);
                 final LoginDTO loginDTO = new LoginDTO(email, password);
-                //Logging in is slightly delayed here for a better user experience.
+                //Invoking the login method is slightly delayed here for a better user experience.
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

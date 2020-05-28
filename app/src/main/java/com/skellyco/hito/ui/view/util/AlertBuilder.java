@@ -9,7 +9,7 @@ import com.skellyco.hito.R;
 
 public class AlertBuilder {
 
-    public static AlertDialog buildInformationDialog(Context ctx, String errorMessage)
+    public static AlertDialog buildErrorDialog(Context ctx, String errorMessage)
     {
         AlertDialog alertDialog = new AlertDialog.Builder(ctx, R.style.DarkThemeDialog).create();
         alertDialog.setMessage(errorMessage);

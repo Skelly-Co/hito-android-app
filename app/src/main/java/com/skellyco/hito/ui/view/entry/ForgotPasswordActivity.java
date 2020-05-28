@@ -176,7 +176,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void displayGenericError(String errorMessage)
     {
-        AlertDialog errorDialog = AlertBuilder.buildInformationDialog(this, errorMessage);
+        AlertDialog errorDialog = AlertBuilder.buildErrorDialog(this, errorMessage);
         errorDialog.show();
     }
 
