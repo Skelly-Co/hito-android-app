@@ -52,6 +52,9 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                                                                                final MessageDTO messageDTO)
     {
         final MutableLiveData<Resource<Void, InsertDataError>> createPrivateConversationResource = new MutableLiveData<>();
+        // It is important to notice here that we are on purpose not passing the activity to the first onCompleteListener
+        // We wanna make sure that after creating a conversation the insertMessage method will be invoked and that the given
+        // message will be inserted, no matter if passed activity is alive or not.
         privateConversationDAO.createPrivateConversation(privateConversationDTO)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
