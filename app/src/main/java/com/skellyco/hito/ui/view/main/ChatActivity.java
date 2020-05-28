@@ -195,6 +195,18 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Invokes fetchPrivateConversation method on the ChatViewModel to fetch the data into the model
+     * and afterwards invokes getPrivateConversation method to observe on the PrivateConversation and display
+     * the messages between the logged in user and the interlocutor.
+     *
+     * After we will successfully load the information about the PrivateConversation between the users we can enable the message
+     * input and allow the user to send the messages.
+     *
+     * It is important to notice that we are passing the Activity into the observe method which makes our
+     * observer lifecycle-aware. It means that we do not have to override the onStop method and stop observing on the LiveData
+     * there, since it will be done automatically.
+     */
     private void loadPrivateConversationAndMessages()
     {
         chatViewModel.fetchPrivateConversation(this);
@@ -214,6 +226,10 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Uses the ChatViewModel to send the message to the interlocutor.
+     * When the message will be successfully sent, the message input will be cleared.
+     */
     private void sendMessage()
     {
         String interlocutorId = chatViewModel.getLoggedInUid();
@@ -221,6 +237,7 @@ public class ChatActivity extends AppCompatActivity {
         Date postTime = Calendar.getInstance().getTime();
         MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text);
 
+        //We want to disable the send button to prevent spamming and sending the same message multiple times.
         btnSendMessage.setEnabled(false);
         LiveDataUtil.observeOnce(chatViewModel.sendMessage(this, messageDTO), new Observer<Resource<Void, InsertDataError>>() {
             @Override
@@ -237,6 +254,9 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Overrides the finish method to add the sliding animation on finish.
+     */
     @Override
     public void finish() {
         super.finish();
