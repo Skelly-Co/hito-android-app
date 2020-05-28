@@ -3,9 +3,9 @@ package com.skellyco.hito.core.application;
 import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.shared.Resource;
-import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
-import com.skellyco.hito.core.entity.dto.LoginDTO;
-import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
+import com.skellyco.hito.core.model.dto.CreateAccountDTO;
+import com.skellyco.hito.core.model.dto.LoginDTO;
+import com.skellyco.hito.core.model.dto.ResetPasswordDTO;
 import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.core.shared.error.ResetPasswordError;

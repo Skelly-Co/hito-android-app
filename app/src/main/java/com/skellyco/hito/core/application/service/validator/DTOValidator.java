@@ -1,8 +1,8 @@
 package com.skellyco.hito.core.application.service.validator;
 
-import com.skellyco.hito.core.entity.dto.CreateAccountDTO;
-import com.skellyco.hito.core.entity.dto.LoginDTO;
-import com.skellyco.hito.core.entity.dto.ResetPasswordDTO;
+import com.skellyco.hito.core.model.dto.CreateAccountDTO;
+import com.skellyco.hito.core.model.dto.LoginDTO;
+import com.skellyco.hito.core.model.dto.ResetPasswordDTO;
 import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.core.shared.error.ResetPasswordError;

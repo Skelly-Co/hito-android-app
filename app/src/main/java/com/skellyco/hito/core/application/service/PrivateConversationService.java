@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.application.IPrivateConversationService;
 import com.skellyco.hito.core.domain.IPrivateConversationRepository;
-import com.skellyco.hito.core.entity.PrivateConversation;
-import com.skellyco.hito.core.entity.dto.MessageDTO;
-import com.skellyco.hito.core.entity.dto.PrivateConversationDTO;
+import com.skellyco.hito.core.model.entity.PrivateConversation;
+import com.skellyco.hito.core.model.dto.MessageDTO;
+import com.skellyco.hito.core.model.dto.PrivateConversationDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.core.shared.error.InsertDataError;

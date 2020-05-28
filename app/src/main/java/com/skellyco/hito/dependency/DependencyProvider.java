@@ -6,9 +6,9 @@ import com.skellyco.hito.core.application.IUserService;
 import com.skellyco.hito.core.application.service.AuthenticationService;
 import com.skellyco.hito.core.application.service.PrivateConversationService;
 import com.skellyco.hito.core.application.service.UserService;
-import com.skellyco.hito.model.firebase.AuthenticationRepository;
-import com.skellyco.hito.model.firebase.PrivateConversationRepository;
-import com.skellyco.hito.model.firebase.UserRepository;
+import com.skellyco.hito.domain.firebase.AuthenticationRepository;
+import com.skellyco.hito.domain.firebase.PrivateConversationRepository;
+import com.skellyco.hito.domain.firebase.UserRepository;
 
 public class DependencyProvider {
 

@@ -16,14 +16,14 @@
             tools:replace="android:launchMode"
             android:launchMode="standard" />
 
-        <activity android:name=".view.main.ChatActivity"
+        <activity android:name=".ui.view.main.ChatActivity"
             android:theme="@style/AppDarkTheme.SlidrActivityTheme"/>
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".ui.view.main.MainActivity"
             android:theme="@style/AppDarkTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".view.entry.SplashActivity"
+            android:name=".ui.view.entry.SplashActivity"
             android:theme="@style/AppDarkTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,13 +32,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.entry.LoginActivity"
+            android:name=".ui.view.entry.LoginActivity"
             android:theme="@style/AppDarkTheme" />
         <activity
-            android:name=".view.entry.CreateAccountActivity"
+            android:name=".ui.view.entry.CreateAccountActivity"
             android:theme="@style/AppDarkTheme.SlidrActivityTheme" />
         <activity
-            android:name=".view.entry.ForgotPasswordActivity"
+            android:name=".ui.view.entry.ForgotPasswordActivity"
             android:theme="@style/AppDarkTheme.SlidrActivityTheme" />
     </application>
 

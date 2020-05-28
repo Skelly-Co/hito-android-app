@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import androidx.lifecycle.LiveData;
 
-import com.skellyco.hito.core.entity.User;
+import com.skellyco.hito.core.model.entity.User;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 

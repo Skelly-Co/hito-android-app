@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="?attr/colorBackground"
-    tools:context=".view.entry.CreateAccountActivity">
+    tools:context=".ui.view.entry.CreateAccountActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/conMainContainer"
