@@ -9,6 +9,7 @@
         <item name="colorPrimaryAccentGradient">@color/colorPrimaryAccentGradient</item>
         <item name="colorBackground">@color/colorDark</item>
         <item name="colorBackgroundElement">@color/colorDeepDark</item>
+        <item name="colorBackgroundElementContrast">@color/colorDeepestDark</item>
         <item name="colorBackgroundContrast">@color/colorContrastDark</item>
         <item name="colorText">@color/colorWhite</item>
         <item name="colorTextContrast">@color/colorLightGrey</item>

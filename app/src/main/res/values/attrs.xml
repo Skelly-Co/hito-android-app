@@ -6,6 +6,7 @@
     <attr name="colorBackground" format="color"/>
     <attr name="colorBackgroundElement" format="color"/>
     <attr name="colorBackgroundContrast" format="color"/>
+    <attr name="colorBackgroundElementContrast" format="color"/>
     <attr name="colorText" format="color"/>
     <attr name="colorTextContrast" format="color"/>
     <attr name="colorError" format="color"/>

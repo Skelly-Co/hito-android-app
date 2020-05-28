@@ -127,11 +127,30 @@ public class PrivateConversationRepository implements IPrivateConversationReposi
                     List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
                     if(snapshots.isEmpty())
                     {
-                        //Private conversation not found - there is no conversation between users
-                        //If conversation will be created in the future this method will be invoked and we will hit else clause
-                        Resource<PrivateConversation, FetchDataError> resource =
-                                new Resource<>(Resource.Status.SUCCESS, null, null);
-                        privateConversationResource.setValue(resource);
+                        // If conversation was not found, we also have to check for swapped order of interlocutors
+                        // This is not the most efficient solution, but the only one since firebase does not support OR operator.
+                        privateConversationDAO.getPrivateConversation(secondInterlocutorId, firstInterlocutorId)
+                                .addSnapshotListener(activity, new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                        List<DocumentSnapshot> snapshots = queryDocumentSnapshots.getDocuments();
+                                        if(snapshots.isEmpty())
+                                        {
+                                            //Private conversation not found - there is no conversation between users
+                                            //If conversation will be created in the future this method will be invoked and we will hit else clause
+                                            Resource<PrivateConversation, FetchDataError> resource =
+                                                    new Resource<>(Resource.Status.SUCCESS, null, null);
+                                            privateConversationResource.setValue(resource);
+                                        }
+                                        else
+                                        {
+                                            DocumentSnapshot conversationDoc = snapshots.get(0);
+                                            final String privateConversationId = conversationDoc.getId();
+                                            fetchUsersAndMessages(privateConversationResource, activity,
+                                                    privateConversationId, secondInterlocutorId, firstInterlocutorId);
+                                        }
+                                    }
+                                });
                     }
                     else
                     {

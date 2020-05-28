@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +23,8 @@ import com.skellyco.hito.core.entity.User;
 import com.skellyco.hito.core.entity.dto.MessageDTO;
 import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
+import com.skellyco.hito.core.shared.error.InsertDataError;
+import com.skellyco.hito.core.util.LiveDataUtil;
 import com.skellyco.hito.view.main.adapter.MessageAdapter;
 import com.skellyco.hito.viewmodel.main.ChatViewModel;
 
@@ -81,6 +85,29 @@ public class ChatActivity extends AppCompatActivity {
                 finish();
             }
         });
+        etMessageInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(etMessageInput.getText().toString().isEmpty())
+                {
+                    btnSendMessage.setEnabled(false);
+                }
+                else
+                {
+                    btnSendMessage.setEnabled(true);
+                }
+            }
+        });
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
     private void initializeMessageInput()
     {
         etMessageInput.setEnabled(false);
+        btnSendMessage.setEnabled(false);
     }
 
     @Override
@@ -160,7 +188,21 @@ public class ChatActivity extends AppCompatActivity {
         String text = etMessageInput.getText().toString();
         Date postTime = Calendar.getInstance().getTime();
         MessageDTO messageDTO = new MessageDTO(interlocutorId, postTime, text);
-        chatViewModel.sendMessage(messageDTO);
+
+        btnSendMessage.setEnabled(false);
+        LiveDataUtil.observeOnce(chatViewModel.sendMessage(messageDTO), new Observer<Resource<Void, InsertDataError>>() {
+            @Override
+            public void onChanged(Resource<Void, InsertDataError> resource) {
+                btnSendMessage.setEnabled(true);
+                if(resource.getStatus() == Resource.Status.SUCCESS)
+                {
+                    etMessageInput.setText("");
+                }
+                // For right now I have not discovered any possible errors that can happen during sending a message.
+                // If some error will occur, it will be logged in domain layer so it won't pass unnoticed.
+                // If this will happen, I will update error handling for FetchDataError both in domain and here.
+            }
+        });
     }
 
     @Override

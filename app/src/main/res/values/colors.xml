@@ -5,6 +5,7 @@
     <color name="colorPrimaryAccentGradient">#831c76</color>
     <color name="colorDark">#18181b</color>
     <color name="colorDeepDark">#121215</color>
+    <color name="colorDeepestDark">#0D0D10</color>
     <color name="colorContrastDark">#333336</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorLightGrey">#72767d</color>
