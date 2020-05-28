@@ -29,6 +29,11 @@ import com.skellyco.hito.ui.viewmodel.main.ChatViewModel;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Role of this activity is to allow the user to chat with the other user by displaying
+ * the private conversation and messages between the users and providing functionality to send a
+ * new message.
+ */
 public class ChatActivity extends AppCompatActivity {
 
     public static String TAG = "ChatActivity";
