@@ -1,5 +1,7 @@
 package com.skellyco.hito.ui.viewmodel.entry;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -18,8 +20,8 @@ public class ForgotPasswordViewModel extends ViewModel {
         this.authenticationService = DependencyProvider.getAuthenticationService();
     }
 
-    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO)
+    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(Activity activity, ResetPasswordDTO resetPasswordDTO)
     {
-        return authenticationService.resetPassword(resetPasswordDTO);
+        return authenticationService.resetPassword(activity, resetPasswordDTO);
     }
 }

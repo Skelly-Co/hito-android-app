@@ -1,5 +1,7 @@
 package com.skellyco.hito.ui.viewmodel.entry;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -18,9 +20,9 @@ public class SplashViewModel extends ViewModel {
         this.authenticationService = DependencyProvider.getAuthenticationService();
     }
 
-    public LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
+    public LiveData<Resource<String, LoginError>> login(Activity activity, LoginDTO loginDTO)
     {
-        return authenticationService.login(loginDTO);
+        return authenticationService.login(activity, loginDTO);
     }
 
 }

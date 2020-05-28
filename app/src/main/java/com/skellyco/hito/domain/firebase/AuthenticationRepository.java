@@ -1,5 +1,6 @@
 package com.skellyco.hito.domain.firebase;
 
+import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -36,10 +37,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO)
+    public LiveData<Resource<String, LoginError>> login(Activity activity, LoginDTO loginDTO)
     {
         final MutableLiveData<Resource<String, LoginError>> loginResource = new MutableLiveData<>();
-        authenticationDAO.login(loginDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        authenticationDAO.login(loginDTO).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
@@ -61,10 +62,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public LiveData<Resource<Void, CreateAccountError>> createAccount(final CreateAccountDTO createAccountDTO)
+    public LiveData<Resource<Void, CreateAccountError>> createAccount(Activity activity, final CreateAccountDTO createAccountDTO)
     {
         final MutableLiveData<Resource<Void, CreateAccountError>> createAccountResource = new MutableLiveData<>();
-        authenticationDAO.createAccount(createAccountDTO).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        authenticationDAO.createAccount(createAccountDTO).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
@@ -102,10 +103,10 @@ public class AuthenticationRepository implements IAuthenticationRepository {
     }
 
     @Override
-    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO)
+    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(Activity activity, ResetPasswordDTO resetPasswordDTO)
     {
         final MutableLiveData<Resource<Void, ResetPasswordError>> resetPasswordResource = new MutableLiveData<>();
-        authenticationDAO.resetPassword(resetPasswordDTO).addOnCompleteListener(new OnCompleteListener<Void>() {
+        authenticationDAO.resetPassword(resetPasswordDTO).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())

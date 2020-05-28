@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
     {
         clearErrors();
         showLoading();
-        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(loginDTO);
+        LiveData<Resource<String, LoginError>> loginResource = loginViewModel.login(this, loginDTO);
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {

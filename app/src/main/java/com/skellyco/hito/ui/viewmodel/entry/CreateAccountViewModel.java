@@ -1,5 +1,7 @@
 package com.skellyco.hito.ui.viewmodel.entry;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -18,8 +20,8 @@ public class CreateAccountViewModel extends ViewModel {
         this.authenticationService = DependencyProvider.getAuthenticationService();
     }
 
-    public LiveData<Resource<Void, CreateAccountError>> createAccount(CreateAccountDTO createAccountDTO)
+    public LiveData<Resource<Void, CreateAccountError>> createAccount(Activity activity, CreateAccountDTO createAccountDTO)
     {
-        return authenticationService.createAccount(createAccountDTO);
+        return authenticationService.createAccount(activity, createAccountDTO);
     }
 }

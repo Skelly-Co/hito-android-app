@@ -118,7 +118,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     {
         clearErrors();
         showLoading();
-        LiveData<Resource<Void, ResetPasswordError>> resetPasswordResource = forgotPasswordViewModel.resetPassword(resetPasswordDTO);
+        LiveData<Resource<Void, ResetPasswordError>> resetPasswordResource = forgotPasswordViewModel.resetPassword(this, resetPasswordDTO);
         LiveDataUtil.observeOnce(resetPasswordResource, new Observer<Resource<Void, ResetPasswordError>>() {
             @Override
             public void onChanged(Resource<Void, ResetPasswordError> resource) {

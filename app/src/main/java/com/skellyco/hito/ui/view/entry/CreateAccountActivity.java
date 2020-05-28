@@ -126,7 +126,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     {
         clearErrors();
         showLoading();
-        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(createAccountDTO);
+        LiveData<Resource<Void, CreateAccountError>> createAccountResource = createAccountViewModel.createAccount(this, createAccountDTO);
         LiveDataUtil.observeOnce(createAccountResource, new Observer<Resource<Void, CreateAccountError>>() {
             @Override
             public void onChanged(Resource<Void, CreateAccountError> resource) {

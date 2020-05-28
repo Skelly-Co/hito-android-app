@@ -1,5 +1,7 @@
 package com.skellyco.hito.core.application.service;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -25,11 +27,11 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO) {
+    public LiveData<Resource<String, LoginError>> login(Activity activity, LoginDTO loginDTO) {
         ValidationResult<LoginError> validationResult = DTOValidator.validateLoginDTO(loginDTO);
         if(validationResult.isValid())
         {
-            return authenticationRepository.login(loginDTO);
+            return authenticationRepository.login(activity, loginDTO);
         }
         else
         {
@@ -42,11 +44,11 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public LiveData<Resource<Void, CreateAccountError>> createAccount(CreateAccountDTO createAccountDTO) {
+    public LiveData<Resource<Void, CreateAccountError>> createAccount(Activity activity, CreateAccountDTO createAccountDTO) {
         ValidationResult<CreateAccountError> validationResult = DTOValidator.validateCreateAccountDTO(createAccountDTO);
         if(validationResult.isValid())
         {
-            return authenticationRepository.createAccount(createAccountDTO);
+            return authenticationRepository.createAccount(activity, createAccountDTO);
         }
         else
         {
@@ -59,11 +61,11 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO) {
+    public LiveData<Resource<Void, ResetPasswordError>> resetPassword(Activity activity, ResetPasswordDTO resetPasswordDTO) {
         ValidationResult<ResetPasswordError> validationResult = DTOValidator.validateResetPasswordDTO(resetPasswordDTO);
         if(validationResult.isValid())
         {
-            return authenticationRepository.resetPassword(resetPasswordDTO);
+            return authenticationRepository.resetPassword(activity, resetPasswordDTO);
         }
         else
         {

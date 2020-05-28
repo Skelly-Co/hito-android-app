@@ -76,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void login(LoginDTO loginDTO)
     {
-        final LiveData<Resource<String, LoginError>> loginResource = splashViewModel.login(loginDTO);
+        final LiveData<Resource<String, LoginError>> loginResource = splashViewModel.login(this, loginDTO);
         LiveDataUtil.observeOnce(loginResource, new Observer<Resource<String, LoginError>>() {
             @Override
             public void onChanged(Resource<String, LoginError> resource) {

@@ -1,5 +1,7 @@
 package com.skellyco.hito.core.domain;
 
+import android.app.Activity;
+
 import androidx.lifecycle.LiveData;
 
 import com.skellyco.hito.core.model.dto.CreateAccountDTO;
@@ -12,10 +14,10 @@ import com.skellyco.hito.core.shared.Resource;
 
 public interface IAuthenticationRepository {
 
-    LiveData<Resource<String, LoginError>> login(LoginDTO loginDTO);
+    LiveData<Resource<String, LoginError>> login(Activity activity, LoginDTO loginDTO);
 
-    LiveData<Resource<Void, CreateAccountError>> createAccount(CreateAccountDTO createAccountDTO);
+    LiveData<Resource<Void, CreateAccountError>> createAccount(Activity activity, CreateAccountDTO createAccountDTO);
 
-    LiveData<Resource<Void, ResetPasswordError>> resetPassword(ResetPasswordDTO resetPasswordDTO);
+    LiveData<Resource<Void, ResetPasswordError>> resetPassword(Activity activity, ResetPasswordDTO resetPasswordDTO);
 
 }
