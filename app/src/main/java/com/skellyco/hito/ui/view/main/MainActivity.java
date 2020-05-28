@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static final String TAG = "MainActivity";
-    public static final String EXTRA_UID = "EXTRA_UID";
+    public static final String EXTRA_LOGGED_IN_UID = "EXTRA_LOGGED_IN_UID";
     private static final String STATE_NAVBAR_ITEM = "STATE_NAVBAR_ITEM";
     private static final String STATE_SETTINGS_POPUP_SHOWN = "SETTINGS_POPUP_SHOWN";
     private static final int SETTINGS_POPUP_ANIM_DURATION = 350;
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String loggedInUid = getIntent().getStringExtra(EXTRA_UID);
+        String loggedInUid = getIntent().getStringExtra(EXTRA_LOGGED_IN_UID);
 
         initializeViews();
         initializeViewModel(loggedInUid);

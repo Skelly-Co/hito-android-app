@@ -17,6 +17,11 @@ import com.skellyco.hito.ui.view.main.MainActivity;
 import com.skellyco.hito.ui.view.util.LoginDataManager;
 import com.skellyco.hito.ui.viewmodel.entry.SplashViewModel;
 
+/**
+ * Splash Activity that is shown at the start of the application.
+ * The role of this Activity is to show the splash screen during the application startup
+ * and to redirect the user either to the LoginActivity or MainActivity.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     public static final String TAG = "SplashActivity";
@@ -31,11 +36,22 @@ public class SplashActivity extends AppCompatActivity {
         startApplication();
     }
 
+    /**
+     * Initializes the ViewModel.
+     */
     private void initializeViewModel()
     {
         splashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
     }
 
+    /**
+     * Gets the information about saved login data from LoginDataManager and checks whether
+     * it is null or not.
+     *
+     * If saved login data is null it means that there is no information in the system about
+     * the saved logged in user so it starts the LoginActivity. If saved login data exists
+     * it invokes the login method to perform the logging in using saved user credentials.
+     */
     private void startApplication()
     {
         LoginDataManager loginDataManager = new LoginDataManager(this);
@@ -51,6 +67,13 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Uses SplashViewModel to perform the logging in using the passed credentials.
+     * If logging in is successful it starts the MainActivity. If logging in did not
+     * succeeded for any reason, it starts the LoginActivity.
+     *
+     * @param loginDTO login credentials.
+     */
     private void login(LoginDTO loginDTO)
     {
         final LiveData<Resource<String, LoginError>> loginResource = splashViewModel.login(loginDTO);
@@ -70,6 +93,9 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Starts the LoginActivity.
+     */
     private void startLoginActivity()
     {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -77,10 +103,15 @@ public class SplashActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
 
-    private void startMainActivity(String uid)
+    /**
+     * Starts the MainActivity.
+     *
+     * @param loggedInUid logged in user id.
+     */
+    private void startMainActivity(String loggedInUid)
     {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_UID, uid);
+        intent.putExtra(MainActivity.EXTRA_LOGGED_IN_UID, loggedInUid);
         startActivity(intent);
     }
 

@@ -256,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
     private void startMainActivity(String uid)
     {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.EXTRA_UID, uid);
+        intent.putExtra(MainActivity.EXTRA_LOGGED_IN_UID, uid);
         startActivity(intent);
         overridePendingTransition(R.anim.activity_slide_in_right, R.anim.activity_slide_out_left);
     }
