@@ -6,10 +6,20 @@ import com.skellyco.hito.core.shared.error.CreateAccountError;
 import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.core.shared.error.ResetPasswordError;
 
+/**
+ * Class for resolving the firestore error messages and wrapping them into
+ * our application's errors.
+ */
 public class ErrorResolver {
 
     public static final String TAG = "ErrorResolver";
 
+    /**
+     * Resolves the firebase login error and wraps it into our application's LoginError
+     *
+     * @param errorMessage firestore login error message.
+     * @return resolved error as a LoginError
+     */
     public static LoginError resolveLoginError(String errorMessage)
     {
         LoginError loginError = new LoginError();
@@ -45,6 +55,12 @@ public class ErrorResolver {
         return loginError;
     }
 
+    /**
+     * Resolves the firebase create account error and wraps it into our application's CreateAccountError
+     *
+     * @param errorMessage firestore create account error message.
+     * @return resolved error as a CreateAccountError
+     */
     public static CreateAccountError resolveCreateAccountError(String errorMessage)
     {
         CreateAccountError createAccountError = new CreateAccountError();
@@ -70,6 +86,12 @@ public class ErrorResolver {
         return createAccountError;
     }
 
+    /**
+     * Resolves the firebase reset password error and wraps it into our application's ResetPasswordError.
+     *
+     * @param errorMessage firestore reset password error message.
+     * @return resolved error as a ResetPasswordError.
+     */
     public static ResetPasswordError resolveResetPasswordError(String errorMessage)
     {
         ResetPasswordError resetPasswordError = new ResetPasswordError();
