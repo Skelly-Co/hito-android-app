@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.skellyco.hito.R;
 import com.skellyco.hito.core.model.entity.User;
-import com.skellyco.hito.ui.view.util.ListFilter;
+import com.skellyco.hito.core.util.ListFilter;
 
 import java.util.ArrayList;
 import java.util.List;

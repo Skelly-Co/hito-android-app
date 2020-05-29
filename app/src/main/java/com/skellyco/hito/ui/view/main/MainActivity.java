@@ -23,7 +23,7 @@ import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.FetchDataError;
 import com.skellyco.hito.ui.view.entry.LoginActivity;
 import com.skellyco.hito.ui.view.main.adapter.UserAdapter;
-import com.skellyco.hito.ui.view.util.LoginDataManager;
+import com.skellyco.hito.core.util.LoginDataManager;
 import com.skellyco.hito.ui.view.util.animation.ResizeWidthAnimation;
 import com.skellyco.hito.ui.viewmodel.main.MainViewModel;
 

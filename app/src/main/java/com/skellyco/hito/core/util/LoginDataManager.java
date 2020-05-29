@@ -1,4 +1,4 @@
-package com.skellyco.hito.ui.view.util;
+package com.skellyco.hito.core.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

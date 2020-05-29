@@ -26,7 +26,7 @@ import com.skellyco.hito.core.shared.error.LoginError;
 import com.skellyco.hito.ui.view.main.MainActivity;
 import com.skellyco.hito.ui.view.util.AlertBuilder;
 import com.skellyco.hito.core.util.LiveDataUtil;
-import com.skellyco.hito.ui.view.util.LoginDataManager;
+import com.skellyco.hito.core.util.LoginDataManager;
 import com.skellyco.hito.ui.view.util.ViewHelper;
 import com.skellyco.hito.ui.viewmodel.entry.LoginViewModel;
 
