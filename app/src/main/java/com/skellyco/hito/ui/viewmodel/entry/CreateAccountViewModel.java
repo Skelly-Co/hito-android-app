@@ -24,9 +24,9 @@ public class CreateAccountViewModel extends ViewModel {
     }
 
     /**
-     * Uses authentication to create an account.
+     * Uses AuthenticationService to create an account.
      *
-     * @param activity activity that requested creating an account.
+     * @param activity activity that invokes the method.
      * @param createAccountDTO create account form.
      * @return LiveData with Resource that contains informations about operation status and error (if occurred).
      */

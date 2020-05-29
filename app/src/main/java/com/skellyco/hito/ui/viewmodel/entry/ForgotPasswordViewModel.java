@@ -24,8 +24,9 @@ public class ForgotPasswordViewModel extends ViewModel {
     }
 
     /**
+     * Uses AuthenticationService to reset the password.
      *
-     * @param activity activity that requested resetting the password.
+     * @param activity activity that invokes the method.
      * @param resetPasswordDTO reset password form.
      * @return LiveData with Resource that contains informations about operation status and error (if occurred).
      */
