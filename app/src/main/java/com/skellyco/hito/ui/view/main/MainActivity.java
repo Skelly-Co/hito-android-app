@@ -31,8 +31,17 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Role of this Activity is to allow the user to see his conversation history, groups and local users.
+ * For right now groups and history are not implemented, so the user is only able to see the list of
+ * the local users. After clicking on some group / history item / local user, user will be redirected to
+ * ChatActivity.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Defines the navigation bar items.
+     */
     private enum NavbarItem {
         GROUPS(0), LOCAL_USERS(1), HISTORY(2);
 
@@ -43,11 +52,20 @@ public class MainActivity extends AppCompatActivity {
             this.value = value;
         }
 
+        /**
+         * Returns the value of the NavbarItem
+         * @return value of the NavbarItem.
+         */
         public int getValue()
         {
             return value;
         }
 
+        /**
+         *
+         * @param value value of the NavbarItem.
+         * @return NavbarItem associated with given value.
+         */
         public static NavbarItem getNavbarItem(int value)
         {
             NavbarItem[] navbarItems = NavbarItem.values();
@@ -101,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         setUpStartingState(savedInstanceState);
     }
 
+    /**
+     * Initializes the views - assigns layout's elements to the instance variables.
+     */
     private void initializeViews()
     {
         imgProfilePicture = findViewById(R.id.imgProfilePicture);
@@ -114,12 +135,19 @@ public class MainActivity extends AppCompatActivity {
         rbtHistory = findViewById(R.id.rbtHistory);
     }
 
+    /**
+     *  Initializes the ViewModel.
+     */
     private void initializeViewModel(String loggedInUid)
     {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.setLoggedInUid(loggedInUid);
     }
 
+    /**
+     * Initializes the listeners - specifies the actions that should happen during the interaction between
+     * the user and the activity.
+     */
     private void initializeListeners()
     {
         imgProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the settings popup. Saves the width of the settings popup and hides it.
+     */
     private void initializeSettingsPopup()
     {
         settingsPopupWidth = linSettingsPopup.getLayoutParams().width;
@@ -193,6 +224,12 @@ public class MainActivity extends AppCompatActivity {
         linSettingsPopup.requestLayout();
     }
 
+    /**
+     * Initializes the RecyclerView and its different adapters.
+     *
+     * Since right now only local users functionality is implemented it only
+     * initializes localUsersAdapter.
+     */
     private void initializeRecyclerViewAndAdapters()
     {
         recChatList.setLayoutManager(new LinearLayoutManager(this));
@@ -203,8 +240,18 @@ public class MainActivity extends AppCompatActivity {
                 startChatActivity(mainViewModel.getLoggedInUid(), user.getUid());
             }
         });
+        //TO DO - initialize groups & history adapters
     }
 
+    /**
+     * Initializes the observers for the local users, history and groups.
+     * We also have to store the observer in the instance variable in order to be
+     * able to stop the observation associated with selected NavbarItem, while
+     * switching to the different NavbarItem.
+     *
+     * Since right now only local users functionality is implemented it only
+     * initializes localUsersObserver.
+     */
     private void initializeChatListObservers()
     {
         localUsersObserver = new Observer<Resource<List<User>, FetchDataError>>()
@@ -221,13 +268,30 @@ public class MainActivity extends AppCompatActivity {
                 // If this will happen, I will update error handling for FetchDataError both in domain and here.
             }
         };
+        //TO DO - initialize groups & history observers
     }
 
+    /**
+     * Initializes LoginDataManager.
+     */
     private void initializeLoginDataManager()
     {
         loginDataManager = new LoginDataManager(this);
     }
 
+    /**
+     * Sets up the activity during the startup. It checks whether the activity
+     * is started for the first time or if it is being recreated after
+     * configuration changes / orientation change / activity is being killed etc.
+     *
+     * If it's being started for the first time it sets it to the initial state
+     * by setting the selectedNavbarItem to local users (this is the main and the
+     * default functionality) and hiding the settings popup.
+     *
+     * If it's being recreated it restores it to the given saved state.
+     *
+     * @param savedInstanceState saved state of the activity.
+     */
     private void setUpStartingState(Bundle savedInstanceState)
     {
         if(savedInstanceState != null)
@@ -248,6 +312,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Invokes fetchData method on the MainViewModel to fetch the needed data into the model.
+     * Afterwards it checks which navbar item was set during setUpStartingState method (that was invoked
+     * in onCreate method) and loads the appropriate data (local users, groups or history).
+     *
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -275,6 +345,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves the current application state into the given outState in order to later
+     * make it able to restore this state when configuration changes / orientation changes / activity is being killed etc.
+     *
+     * @param outState state that we save our data into.
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -282,6 +358,12 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean(STATE_SETTINGS_POPUP_SHOWN, settingsPopupShown);
     }
 
+    /**
+     * Checks which NavbarItem is currently selected and invokes the updateFilter method
+     * on the adapter associated with the selectedNavbarItem.
+     *
+     * @param filter filter for updating the recycler view.
+     */
     private void filterChatList(String filter)
     {
         switch (selectedNavbarItem)
@@ -304,6 +386,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks which NavbarItem is currently selected and removes the observer that
+     * is associated with it.
+     */
     private void removeChatListObserver()
     {
         switch (selectedNavbarItem)
@@ -326,24 +412,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Since groups functionality is not implemented yet, this method just clears the adapter.
+     */
     private void loadGroups()
     {
         //TO DO - start observing groups
         recChatList.setAdapter(null);
     }
 
+    /**
+     * Sets the RecyclerView adapter to localUsersAdapter and starts observing on the local users.
+     * Since we are passing the activity to observe method of the LiveData we are making it Lifecycle aware,
+     * which means that we don't have to implement onStop method and stop observing data there, since it will
+     * be done automatically for us.
+     */
     private void loadLocalUsers()
     {
         recChatList.setAdapter(localUsersAdapter);
         mainViewModel.getLocalUsers(this).observe(this, localUsersObserver);
     }
 
+    /**
+     * Since history functionality is not implemented yet, this method just clears the adapter.
+     */
     private void loadHistory()
     {
         //TO DO - start observing history
         recChatList.setAdapter(null);
     }
 
+    /**
+     * Toggles the settings popup - shows it or hides it, depending on the current
+     * value of settingPopupShown field.
+     */
     private void toggleSettingsPopup()
     {
         if(settingsPopupShown)
@@ -356,6 +458,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Shows the settings popup
+     *
+     * @param animate specifies if settings popup should be displayed with animation.
+     */
     private void showSettingsPopup(boolean animate)
     {
         settingsPopupShown = true;
@@ -372,6 +479,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hides the settings popup.
+     *
+     * @param animate specifies if settings popup should be hidden with animation.
+     */
     private void hideSettingsPopup(boolean animate)
     {
         settingsPopupShown = false;
@@ -388,6 +500,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Invokes clearSavedLoginData on LoginDataManager to clear the informations about the logged in user
+     * and finishes the activity.
+     */
     private void logout()
     {
         loginDataManager.clearSavedLoginData();
@@ -397,6 +513,12 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Starts the ChatActivity.
+     *
+     * @param loggedInUid id of the logged in user.
+     * @param interlocutorId id of the interlocutor.
+     */
     private void startChatActivity(String loggedInUid, String interlocutorId)
     {
         Intent intent = new Intent(this, ChatActivity.class);

@@ -168,11 +168,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     /**
-     * Invokes fetchInterlocutor method on the ChatViewModel to fetch the data into the model
+     * Invokes fetchInterlocutor method on the ChatViewModel to fetch the interlocutor data into the model
      * and afterwards invokes getInterlocutor method to observe on the interlocutor and display
      * the interlocutor's data in the topbar.
      *
-     * Also after interlocutor is successfully fetched it
+     * After interlocutor is successfully fetched it
      * invokes loadPrivateConversationAndMessages method to fetch the conversation between the logged in
      * user and the interlocutor.
      *
@@ -201,7 +201,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     /**
-     * Invokes fetchPrivateConversation method on the ChatViewModel to fetch the data into the model
+     * Invokes fetchPrivateConversation method on the ChatViewModel to fetch the PrivateConversation data into the model
      * and afterwards invokes getPrivateConversation method to observe on the PrivateConversation and display
      * the messages between the logged in user and the interlocutor.
      *
