@@ -11,6 +11,9 @@ import com.skellyco.hito.core.shared.Resource;
 import com.skellyco.hito.core.shared.error.ResetPasswordError;
 import com.skellyco.hito.dependency.DependencyProvider;
 
+/**
+ * ViewModel for ForgotPasswordActivity
+ */
 public class ForgotPasswordViewModel extends ViewModel {
 
     private IAuthenticationService authenticationService;
@@ -20,6 +23,12 @@ public class ForgotPasswordViewModel extends ViewModel {
         this.authenticationService = DependencyProvider.getAuthenticationService();
     }
 
+    /**
+     *
+     * @param activity activity that requested resetting the password.
+     * @param resetPasswordDTO reset password form.
+     * @return LiveData with Resource that contains informations about operation status and error (if occurred).
+     */
     public LiveData<Resource<Void, ResetPasswordError>> resetPassword(Activity activity, ResetPasswordDTO resetPasswordDTO)
     {
         return authenticationService.resetPassword(activity, resetPasswordDTO);
